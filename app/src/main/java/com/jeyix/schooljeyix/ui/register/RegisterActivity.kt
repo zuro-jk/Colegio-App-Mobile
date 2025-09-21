@@ -27,35 +27,35 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        etName = findViewById(R.id.etName)
-        etEmail = findViewById(R.id.etEmail)
-        etPassword = findViewById(R.id.etPassword)
-        etConfirmPassword = findViewById(R.id.etConfirmPassword)
-        btnRegister = findViewById(R.id.btnRegister)
-
-        btnRegister.setOnClickListener {
-            val name = etName.text.toString()
-            val email = etEmail.text.toString()
-            val password = etPassword.text.toString()
-            val confirm = etConfirmPassword.text.toString()
-
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
-            } else if (password != confirm) {
-                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-            } else {
-                val success = runCatching {
-                    useCases.register(User(name = name, email = email, password = password))
-                }.getOrDefault(false)
-
-                if (success) {
-                    Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
-                    finish() // volver al login
-                } else {
-                    Toast.makeText(this, "Correo ya registrado", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+//        etName = findViewById(R.id.etName)
+//        etEmail = findViewById(R.id.etEmail)
+//        etPassword = findViewById(R.id.etPassword)
+//        etConfirmPassword = findViewById(R.id.etConfirmPassword)
+//        btnRegister = findViewById(R.id.btnRegister)
+//
+//        btnRegister.setOnClickListener {
+//            val name = etName.text.toString()
+//            val email = etEmail.text.toString()
+//            val password = etPassword.text.toString()
+//            val confirm = etConfirmPassword.text.toString()
+//
+//            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
+//                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+//            } else if (password != confirm) {
+//                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+//            } else {
+//                val success = runCatching {
+//                    useCases.register(User(name = name, email = email, password = password))
+//                }.getOrDefault(false)
+//
+//                if (success) {
+//                    Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
+//                    finish() // volver al login
+//                } else {
+//                    Toast.makeText(this, "Correo ya registrado", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
 
     }
 }

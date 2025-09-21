@@ -1,3 +1,29 @@
 <resources>
-    <string name="app_name">schooljeyix</string>
+    <!-- App -->
+    <string name="app_name">SchoolJeyix</string>
+
+    <!-- Login -->
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="login_email">Correo electrónico</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_button">Ingresar</string>
+    <string name="login_register_prompt">¿No tienes cuenta? Regístrate</string>
+    <string name="login_error_empty">Completa todos los campos</string>
+    <string name="login_error_invalid">Usuario o contraseña incorrectos</string>
+    <string name="login_success">Inicio de sesión exitoso</string>
+
+    <!-- Register -->
+    <string name="register_title">Crear Cuenta</string>
+    <string name="register_name">Nombre completo</string>
+    <string name="register_email">Correo electrónico</string>
+    <string name="register_password">Contraseña</string>
+    <string name="register_button">Registrarse</string>
+    <string name="register_login_prompt">¿Ya tienes cuenta? Inicia sesión</string>
+    <string name="register_success">Registro exitoso</string>
+
+    <!-- General -->
+    <string name="error_generic">Ocurrió un error</string>
+    <string name="button_ok">Aceptar</string>
+    <string name="button_cancel">Cancelar</string>
+
 </resources>
