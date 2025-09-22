@@ -3,7 +3,9 @@
     android:height="180dp"
     android:viewportWidth="360"
     android:viewportHeight="180">
+
     <path
+        android:name="wavePath"
         android:fillColor="@color/secondary"
         android:pathData="M0,100 Q90,150 180,100 T360,100 L360,180 L0,180 Z"/>
 </vector>

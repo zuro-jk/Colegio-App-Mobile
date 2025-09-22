@@ -1,0 +1,7 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/bg_wave_bottom">
+
+    <target
+        android:name="wavePath"
+        android:animation="@animator/wave_path_anim"/>
+</animated-vector>
