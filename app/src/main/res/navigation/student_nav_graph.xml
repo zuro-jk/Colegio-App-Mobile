@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/student_nav_graph"
+    app:startDestination="@id/nav_dashboard">
+
+    <fragment
+        android:id="@+id/nav_dashboard"
+        android:name="com.jeyix.schooljeyix.ui.student.dashboard.DashboardFragment"
+        android:label="Inicio"
+        tools:layout="@layout/fragment_student_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_courses"
+        android:name="com.jeyix.schooljeyix.ui.student.courses.CoursesFragment"
+        android:label="Cursos"
+        tools:layout="@layout/fragment_student_courses" />
+
+    <fragment
+        android:id="@+id/nav_payments"
+        android:name="com.jeyix.schooljeyix.ui.student.payments.PaymentsFragment"
+        android:label="Pagos"
+        tools:layout="@layout/fragment_student_payment" />
+
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.jeyix.schooljeyix.ui.student.notifications.NotificationsFragment"
+        android:label="Notificaciones"
+        tools:layout="@layout/fragment_student_notification" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.jeyix.schooljeyix.ui.student.profile.ProfileFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_student_profile" />
+
+</navigation>

@@ -13,6 +13,7 @@ import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.data.repository.UserRepositoryImpl
 import com.jeyix.schooljeyix.domain.usecase.UserUseCases
 import com.jeyix.schooljeyix.ui.register.RegisterActivity
+import com.jeyix.schooljeyix.ui.student.StudentMainActivity
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -69,17 +70,15 @@ class LoginActivity : AppCompatActivity() {
 
         if (!valid) return
 
-        lifecycleScope.launch {
-            try {
-                val success = useCases.login(email, password)
-                if (success) {
-                    Toast.makeText(this@LoginActivity, "✅ Login exitoso", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@LoginActivity, "❌ Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(this@LoginActivity, "⚠ Error: ${e.message}", Toast.LENGTH_LONG).show()
-            }
+        val defaultEmail = "student@demo.com"
+        val defaultPassword = "123456"
+
+        if (email == defaultEmail && password == defaultPassword) {
+            Toast.makeText(this, "Login exitoso", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, StudentMainActivity::class.java))
+            finish()
+        } else {
+            Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
         }
     }
 }
