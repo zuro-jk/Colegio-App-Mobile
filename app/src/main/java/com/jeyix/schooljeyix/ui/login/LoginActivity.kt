@@ -12,6 +12,7 @@ import com.google.android.material.button.MaterialButton
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.data.repository.UserRepositoryImpl
 import com.jeyix.schooljeyix.domain.usecase.UserUseCases
+import com.jeyix.schooljeyix.ui.parent.ParentMainActivity
 import com.jeyix.schooljeyix.ui.register.RegisterActivity
 import com.jeyix.schooljeyix.ui.student.StudentMainActivity
 import kotlinx.coroutines.launch
@@ -46,16 +47,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun attemptLogin() {
-        val email = etEmail.text.toString().trim()
+        val usernameOrEmail = etEmail.text.toString().trim()
         val password = etPassword.text.toString()
 
         var valid = true
 
-        if (email.isEmpty()) {
-            tilEmail.error = "El correo es obligatorio"
-            valid = false
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tilEmail.error = "Correo inválido"
+        if (usernameOrEmail.isEmpty()) {
+            tilEmail.error = "El correo o usuario es obligatorio"
             valid = false
         } else {
             tilEmail.error = null
@@ -68,17 +66,23 @@ class LoginActivity : AppCompatActivity() {
             tilPassword.error = null
         }
 
+
         if (!valid) return
 
-        val defaultEmail = "student@demo.com"
-        val defaultPassword = "123456"
-
-        if (email == defaultEmail && password == defaultPassword) {
-            Toast.makeText(this, "Login exitoso", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, StudentMainActivity::class.java))
-            finish()
-        } else {
-            Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            try {
+                val success= useCases.login(usernameOrEmail, password)
+                if (success) {
+                    Toast.makeText(this@LoginActivity, "Login exitoso", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@LoginActivity, ParentMainActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this@LoginActivity, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this@LoginActivity, "Error de conexión: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

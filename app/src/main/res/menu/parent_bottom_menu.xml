@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_parent_dashboard"
+        android:icon="@drawable/ic_dashboard_24"
+        android:title="Inicio" />
+
+    <item
+        android:id="@+id/nav_parent_students"
+        android:icon="@drawable/ic_student_24"
+        android:title="Estudiantes" />
+
+    <item
+        android:id="@+id/nav_parent_payments"
+        android:icon="@drawable/ic_payments_24"
+        android:title="Pagos" />
+</menu>

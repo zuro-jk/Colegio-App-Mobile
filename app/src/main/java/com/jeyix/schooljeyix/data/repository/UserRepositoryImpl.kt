@@ -1,23 +1,30 @@
 package com.jeyix.schooljeyix.data.repository
 
+import com.jeyix.schooljeyix.data.datasource.LoginRequest
+import com.jeyix.schooljeyix.data.datasource.RegisterRequest
+import com.jeyix.schooljeyix.data.datasource.RetrofitInstance
 import com.jeyix.schooljeyix.domain.model.User
 import com.jeyix.schooljeyix.domain.usecase.UserRepository
 
 class UserRepositoryImpl: UserRepository {
 
-    private val users = mutableListOf<User>()
+    private val api = RetrofitInstance.api
 
-    override suspend fun login(email: String, password: String): Boolean {
-        return users.any { it.email == email && it.password == password }
+    override suspend fun login(usernameOrEmail: String, password: String): Boolean {
+        val response = api.login(LoginRequest(usernameOrEmail, password))
+        return response.isSuccessful && response.body() == true
     }
 
     override suspend fun register(user: User): Boolean {
-        return if (users.any { it.email == user.email}) {
-            false
-        } else {
-            users.add(user)
-            true
-        }
+        val request = RegisterRequest(
+            firstName = user.firstName,
+            lastName = user.lastName,
+            username = user.username,
+            email = user.email,
+            password = user.password
+        )
+        val response = api.register(request)
+        return response.isSuccessful && response.body() == true
     }
 
 }

@@ -66,7 +66,7 @@ class RegisterActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 val success = runCatching {
-                    val user = User(name = name, email = email, password = password)
+                    val user = User(firstName = name, lastName = name, email = email, password = password)
                     useCases.register(user)
                 }.getOrDefault(false)
 

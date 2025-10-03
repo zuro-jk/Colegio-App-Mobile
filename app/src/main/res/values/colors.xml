@@ -5,25 +5,40 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Primary (color principal de la app, botones, barra superior) -->
-    <color name="primary">#1565C0</color>
-    <color name="primary_variant">#003c8f</color>
+    <color name="primary">#3F51B5</color> <!-- Azul intenso -->
+    <color name="primary_variant">#303F9F</color>
     <color name="on_primary">#FFFFFF</color>
 
-    <!-- Secondary (para resaltar cosas, botones secundarios) -->
-    <color name="secondary">#FF9800</color>
-    <color name="secondary_variant">#c66900</color>
-    <color name="on_secondary">#000000</color>
+    <!-- Secondary -->
+    <color name="secondary">#FF9800</color> <!-- Naranja vibrante -->
+    <color name="secondary_variant">#F57C00</color>
+    <color name="on_secondary">#FFFFFF</color>
 
     <!-- Backgrounds -->
-    <color name="background">#F5F5F5</color> <!-- Gris claro -->
+    <color name="background">#ECEFF1</color> <!-- gris claro neutro -->
     <color name="on_background">#212121</color>
 
     <!-- Surface (tarjetas, cajas, layouts) -->
     <color name="surface">#FFFFFF</color>
     <color name="on_surface">#000000</color>
 
-    <!-- Error -->
+    <!-- Neumorfismo / Extras -->
+    <color name="neu_bg">#E3F2FD</color> <!-- azul muy claro -->
+    <color name="neu_bg_alt">#BBDEFB</color> <!-- azul claro más marcado -->
+    <color name="neu_shadow_light">#FFFFFF</color>
+    <color name="neu_shadow_dark">#90A4AE</color> <!-- sombra gris azulada -->
+
+    <!-- Gradientes para cards -->
+    <color name="card_gradient_start">#3F51B5</color> <!-- azul oscuro -->
+    <color name="card_gradient_end">#5C6BC0</color> <!-- azul medio -->
+    <color name="card_gradient_alt_start">#FFB74D</color> <!-- naranja claro -->
+    <color name="card_gradient_alt_end">#FFA726</color> <!-- naranja vibrante -->
+
+    <!-- Botones -->
+    <color name="btn_gradient_start">#81D4FA</color> <!-- azul celeste -->
+    <color name="btn_gradient_end">#29B6F6</color> <!-- azul intenso -->
+
+    <!-- Errores -->
     <color name="error">#D32F2F</color>
     <color name="on_error">#FFFFFF</color>
-
 </resources>
