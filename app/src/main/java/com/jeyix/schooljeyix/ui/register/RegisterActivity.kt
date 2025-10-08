@@ -7,16 +7,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.jeyix.schooljeyix.R
-import com.jeyix.schooljeyix.data.repository.UserRepositoryImpl
+import com.jeyix.schooljeyix.data.repository.auth.AuthRepositoryImpl
 import com.jeyix.schooljeyix.domain.model.User
-import com.jeyix.schooljeyix.domain.usecase.UserUseCases
+import com.jeyix.schooljeyix.domain.usecase.AuthRepository
+import com.jeyix.schooljeyix.domain.usecase.AuthUseCases
 import com.jeyix.schooljeyix.ui.login.LoginActivity
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
@@ -28,14 +27,13 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var btnRegister: Button
     private lateinit var tvGoLogin: TextView
 
-
-    private val useCases = UserUseCases(UserRepositoryImpl())
+    @Inject
+    lateinit var authRepository: AuthRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // Referencias
         etName = findViewById(R.id.etName)
         etEmail = findViewById(R.id.etEmail)
         etPassword = findViewById(R.id.etPassword)
@@ -43,46 +41,60 @@ class RegisterActivity : AppCompatActivity() {
         btnRegister = findViewById(R.id.btnRegister)
         tvGoLogin = findViewById(R.id.tvGoLogin)
 
-        btnRegister.setOnClickListener {
-            val name = etName.text.toString().trim()
-            val email = etEmail.text.toString().trim()
-            val password = etPassword.text.toString().trim()
-            val confirmPassword = etConfirmPassword.text.toString().trim()
+        btnRegister.setOnClickListener { attemptRegister() }
 
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+        tvGoLogin.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+    }
 
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                Toast.makeText(this, "Correo electrónico inválido", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+    private fun attemptRegister() {
+        val name = etName.text.toString().trim()
+        val email = etEmail.text.toString().trim()
+        val password = etPassword.text.toString().trim()
+        val confirmPassword = etConfirmPassword.text.toString().trim()
 
-            if (password != confirmPassword) {
-                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-            lifecycleScope.launch {
-                val success = runCatching {
-                    val user = User(firstName = name, lastName = name, email = email, password = password)
-                    useCases.register(user)
-                }.getOrDefault(false)
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Correo electrónico inválido", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-                if (success) {
+        if (password != confirmPassword) {
+            Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val user = User(
+            firstName = name,
+            lastName = name,
+            username = email,
+            email = email,
+            password = password
+        )
+
+        lifecycleScope.launch {
+            try {
+                val response = authRepository.register(user)
+                if (response.success) {
                     Toast.makeText(this@RegisterActivity, "Registro exitoso", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
-                    Toast.makeText(this@RegisterActivity, "Error al registrar", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, response.message, Toast.LENGTH_SHORT).show()
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(
+                    this@RegisterActivity,
+                    "Error de conexión: ${e.localizedMessage}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-        }
-
-        tvGoLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
         }
     }
 }

@@ -2,7 +2,6 @@ package com.jeyix.schooljeyix.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -10,13 +9,16 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.button.MaterialButton
 import com.jeyix.schooljeyix.R
-import com.jeyix.schooljeyix.data.repository.UserRepositoryImpl
-import com.jeyix.schooljeyix.domain.usecase.UserUseCases
+import com.jeyix.schooljeyix.data.repository.auth.AuthRepositoryImpl
+import com.jeyix.schooljeyix.domain.usecase.AuthRepository
+import com.jeyix.schooljeyix.domain.usecase.AuthUseCases
 import com.jeyix.schooljeyix.ui.parent.ParentMainActivity
 import com.jeyix.schooljeyix.ui.register.RegisterActivity
-import com.jeyix.schooljeyix.ui.student.StudentMainActivity
+import dagger.hilt.android.AndroidEntryPoint
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var tilEmail: TextInputLayout
@@ -25,7 +27,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etPassword: TextInputEditText
     private lateinit var btnLogin: MaterialButton
 
-    private val useCases = UserUseCases(UserRepositoryImpl())
+    @Inject
+    lateinit var authRepository: AuthRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,22 +69,25 @@ class LoginActivity : AppCompatActivity() {
             tilPassword.error = null
         }
 
-
         if (!valid) return
 
         lifecycleScope.launch {
             try {
-                val success= useCases.login(usernameOrEmail, password)
-                if (success) {
+                val response = authRepository.login(usernameOrEmail, password)
+                if (response.success) {
                     Toast.makeText(this@LoginActivity, "Login exitoso", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@LoginActivity, ParentMainActivity::class.java))
                     finish()
                 } else {
-                    Toast.makeText(this@LoginActivity, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, response.message, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this@LoginActivity, "Error de conexión: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Error de conexión: ${e.localizedMessage}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

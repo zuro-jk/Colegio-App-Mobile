@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.data.datasource
+package com.jeyix.schooljeyix.data.remote.feature.auth.request
 
 data class LoginRequest(
     val usernameOrEmail: String,
