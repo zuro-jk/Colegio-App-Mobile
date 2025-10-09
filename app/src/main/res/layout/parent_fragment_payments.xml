@@ -31,7 +31,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="8dp"
-            android:backgroundTint="@color/neu_bg">
+            android:backgroundTint="@color/info">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,8 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Cuota Octubre: S/ 120"
-                    android:textSize="16sp"
-                    android:textColor="@color/secondary"/>
+                    android:textSize="16sp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
@@ -85,7 +84,7 @@
             android:layout_marginBottom="12dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="6dp"
-            android:backgroundTint="@color/neu_bg_alt">
+            android:backgroundTint="@color/info">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -107,7 +106,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/primary"
                     android:layout_marginTop="4dp"/>
 
                 <TextView
@@ -115,7 +113,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="@color/primary"
                     android:layout_marginTop="2dp"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

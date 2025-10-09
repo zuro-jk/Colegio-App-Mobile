@@ -1,10 +1,11 @@
 package com.jeyix.schooljeyix.ui.parent
 
+import android.app.ComponentCaller
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -15,6 +16,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ParentMainActivity : AppCompatActivity() {
+
+    override fun onNewIntent(intent: Intent, caller: ComponentCaller) {
+        super.onNewIntent(intent, caller)
+        setIntent(intent)
+        handleDeepLink(intent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_parent_main)
@@ -62,5 +70,26 @@ class ParentMainActivity : AppCompatActivity() {
             }
         }
 
+        handleDeepLink(intent)
+    }
+
+    private fun handleDeepLink(intent: Intent?) {
+        val data: Uri? = intent?.data
+        if (data != null && data.scheme == "myapp" && data.host == "payment") {
+
+            val status = data.getQueryParameter("collection_status")
+            val paymentId = data.getQueryParameter("payment_id")
+
+            val message = when (status) {
+                "approved" -> "¡Pago aprobado! ID: $paymentId"
+                "rejected" -> "El pago fue rechazado."
+                "in_process", "pending" -> "El pago está pendiente de aprobación."
+                else -> "Estado del pago desconocido."
+            }
+
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+
+            intent.data = null
+        }
     }
 }

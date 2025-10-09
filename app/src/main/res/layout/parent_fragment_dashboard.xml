@@ -74,7 +74,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:background="@drawable/bg_button_neu">
+                        android:background="@color/secondary">
 
                         <ImageView
                             android:layout_width="36dp"
@@ -115,7 +115,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:background="@drawable/bg_button_neu">
+                        android:background="@color/accent_purple">
 
                         <ImageView
                             android:layout_width="36dp"
@@ -156,7 +156,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:background="@drawable/bg_button_neu">
+                        android:background="@color/accent_red">
 
                         <ImageView
                             android:layout_width="36dp"
@@ -197,7 +197,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:background="@drawable/bg_button_neu">
+                        android:background="@color/accent_teal">
 
                         <ImageView
                             android:layout_width="36dp"
@@ -241,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="20dp"
-                    android:background="@drawable/bg_card_neu">
+                    android:background="@color/primary">
 
                     <TextView
                         android:text="Próximo pago"
