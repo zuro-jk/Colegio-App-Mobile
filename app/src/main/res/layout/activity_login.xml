@@ -78,9 +78,9 @@
                 style="@style/Widget.Schooljeyix.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login_email"
+                android:hint="Usuario o correo electrónico"
                 android:layout_marginBottom="16dp"
-                app:startIconDrawable="@drawable/ic_email_24"
+                app:startIconDrawable="@drawable/ic_person_24"
                 app:startIconTint="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -88,7 +88,7 @@
                     style="@style/Widget.Schooljeyix.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="textEmailAddress|textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

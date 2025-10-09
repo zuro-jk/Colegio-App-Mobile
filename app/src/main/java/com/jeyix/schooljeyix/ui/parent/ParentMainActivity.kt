@@ -11,7 +11,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jeyix.schooljeyix.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ParentMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
