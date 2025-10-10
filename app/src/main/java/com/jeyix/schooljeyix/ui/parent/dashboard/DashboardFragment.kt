@@ -17,9 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.PaymentSummary
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.StudentSummary
 import com.jeyix.schooljeyix.databinding.ParentFragmentDashboardBinding
+import com.jeyix.schooljeyix.domain.model.PaymentSummary
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -89,7 +89,7 @@ class DashboardFragment : Fragment() {
 
         if (nextPayment != null) {
             // CORRECCIÓN: Usamos el studentName que ahora viene en el objeto
-            binding.tvNextPaymentInfo.text = "S/ ${nextPayment.amount} - ${nextPayment.dueDate}"
+            binding.tvNextPaymentInfo.text = "S/ ${nextPayment.amount} - ${nextPayment.studentName}"
 
             // CORRECCIÓN: Parseamos el String a LocalDate ANTES de formatearlo
             val formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy")

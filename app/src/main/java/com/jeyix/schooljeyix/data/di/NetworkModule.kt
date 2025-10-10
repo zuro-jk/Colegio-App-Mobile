@@ -4,6 +4,7 @@ import com.jeyix.schooljeyix.data.local.datastore.UserPreferences
 import com.jeyix.schooljeyix.data.remote.core.AuthInterceptor
 import com.jeyix.schooljeyix.data.remote.feature.auth.api.AuthApi
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.api.EnrollmentApi
+import com.jeyix.schooljeyix.data.remote.feature.student.api.StudentApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,4 +52,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideEnrollmentApi(retrofit: Retrofit): EnrollmentApi = retrofit.create(EnrollmentApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideStudentApi(retrofit: Retrofit): StudentApi = retrofit.create(StudentApi::class.java)
 }

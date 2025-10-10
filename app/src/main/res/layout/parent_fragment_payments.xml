@@ -1,122 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".ui.parent.payments.PaymentsFragment">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:divider="@android:color/transparent"
-        android:showDividers="middle"
-        android:dividerPadding="16dp">
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-        <!-- Título -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pagos"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/primary"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- Próximo pago -->
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="8dp"
-            android:backgroundTint="@color/info">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pagos y Matrículas"
+                android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp"
-                android:background="@drawable/bg_card_neu">
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@color/primary">
 
-                <TextView
-                    android:text="Próximo pago"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/on_background"/>
+                    android:padding="20dp">
 
-                <TextView
-                    android:id="@+id/tvNextPayment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Cuota Octubre: S/ 120"
-                    android:textSize="16sp"/>
+                    <TextView
+                        android:id="@+id/tvTotalDueLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Pendiente este Mes"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="@color/on_primary"
+                        app:layout_constraintStart_toStartOf="@+id/tvTotalDueAmount"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pagar ahora"
-                    android:textColor="@color/on_primary"
-                    android:layout_marginTop="12dp"
-                    app:cornerRadius="16dp"
-                    android:backgroundTint="@color/secondary"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/tvTotalDueAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textAppearance="?attr/textAppearanceHeadlineMedium"
+                        android:textColor="@color/on_primary"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvTotalDueLabel"
+                        tools:text="S/ 900.00" />
 
-        <!-- Historial de pagos -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Historial de pagos"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/primary"
-            android:layout_marginBottom="12dp"/>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPayAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pagar todo"
+                        app:backgroundTint="@color/secondary"
+                        app:icon="@drawable/ic_payments_24"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <!-- Ejemplo de pago anterior -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="6dp"
-            android:backgroundTint="@color/info">
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp"
-                android:background="@drawable/bg_card_neu_alt">
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-                <TextView
-                    android:text="Pago Septiembre"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/on_background"/>
 
-                <TextView
-                    android:text="Monto: S/ 120"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_marginTop="4dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPayments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="16dp"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_payment"
+        tools:itemCount="5"/>
 
-                <TextView
-                    android:text="Estado: Pagado"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_marginTop="2dp"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Repetir para otros pagos históricos -->
-    </LinearLayout>
-</ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

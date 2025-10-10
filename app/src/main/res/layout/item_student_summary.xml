@@ -23,7 +23,7 @@
             android:layout_height="60dp"
             android:layout_marginBottom="8dp"
             android:scaleType="centerCrop"
-            tools:src="@drawable/ic_student_avatar_24"/>
+            tools:src="@drawable/ic_student_24"/>
 
         <TextView
             android:id="@+id/tvStudentName"

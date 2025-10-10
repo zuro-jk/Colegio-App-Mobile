@@ -1,7 +1,7 @@
 package com.jeyix.schooljeyix.ui.parent.dashboard
 
-import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.PaymentSummary
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.StudentSummary
+import com.jeyix.schooljeyix.domain.model.PaymentSummary
 
 data class DashboardUiState(
     val isLoading: Boolean = true,

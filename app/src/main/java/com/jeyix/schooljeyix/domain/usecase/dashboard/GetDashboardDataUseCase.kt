@@ -2,8 +2,9 @@ package com.jeyix.schooljeyix.domain.usecase.dashboard
 
 import android.util.Log
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.EnrollmentResponse
-import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.PaymentSummary
-import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.StudentSummary
+import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.PaymentSummary as ApiPaymentSummary
+import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.StudentSummary as ApiStudentSummary
+import com.jeyix.schooljeyix.domain.model.PaymentSummary
 import com.jeyix.schooljeyix.domain.usecase.enrollment.GetMyEnrollmentsUseCase
 import com.jeyix.schooljeyix.domain.util.Resource
 import jakarta.inject.Inject
@@ -39,12 +40,12 @@ class GetDashboardDataUseCase @Inject constructor(
     /**
      * Extrae una lista única de estudiantes a partir de las matrículas.
      */
-    private fun extractStudentsFrom(enrollments: List<EnrollmentResponse>): List<StudentSummary> {
+    private fun extractStudentsFrom(enrollments: List<EnrollmentResponse>): List<ApiStudentSummary> {
         return enrollments
             .map { it.student }
             .distinctBy { it.id }
             .map { apiStudent ->
-                StudentSummary(
+                ApiStudentSummary(
                     id = apiStudent.id,
                     fullName = apiStudent.fullName,
                     gradeLevel = apiStudent.gradeLevel,
@@ -68,7 +69,7 @@ class GetDashboardDataUseCase @Inject constructor(
     private fun findNextPaymentFrom(enrollments: List<EnrollmentResponse>): PaymentSummary? {
         val today = LocalDate.now()
 
-        var closestPair: Pair<PaymentSummary, StudentSummary>? = null
+        var closestPair: Pair<ApiPaymentSummary, ApiStudentSummary>? = null
 
         for (enrollment in enrollments) {
             val closestPaymentInEnrollment = enrollment.payments
@@ -86,10 +87,9 @@ class GetDashboardDataUseCase @Inject constructor(
 
         return closestPair?.let { (payment, student) ->
             PaymentSummary(
-                id = payment.id,
                 amount = payment.amount,
                 dueDate = payment.dueDate,
-                isPaid = payment.isPaid
+                studentName = student.fullName
             )
         }
     }
