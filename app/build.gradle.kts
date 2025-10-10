@@ -78,6 +78,9 @@ dependencies {
     // Lottie (opcional animaciones)
     implementation("com.airbnb.android:lottie:6.0.0")
 
+    // Splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
     // Para inyección de dependencias (Hilt)
     implementation("com.google.dagger:hilt-android:2.57.2")
     kapt("com.google.dagger:hilt-compiler:2.57.2")

@@ -4,15 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.jeyix.schooljeyix.R
+import com.jeyix.schooljeyix.data.remote.feature.auth.request.RegisterRequest
+import com.jeyix.schooljeyix.databinding.ActivityRegisterBinding
 import com.jeyix.schooljeyix.domain.model.User
-import com.jeyix.schooljeyix.domain.usecase.AuthRepository
+import com.jeyix.schooljeyix.domain.usecase.auth.AuthRepository
 import com.jeyix.schooljeyix.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import jakarta.inject.Inject
@@ -21,108 +27,63 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var etUsername: EditText
-    private lateinit var etFirstName: EditText
-    private lateinit var etLastName: EditText
-    private lateinit var etEmail: EditText
-    private lateinit var etPassword: EditText
-    private lateinit var etConfirmPassword: EditText
-    private lateinit var btnRegister: Button
-    private lateinit var tvGoLogin: TextView
-
-    @Inject
-    lateinit var authRepository: AuthRepository
-
-    private val TAG = "RegisterActivity"
+    private lateinit var binding: ActivityRegisterBinding
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        Log.d(TAG, "onCreate: Iniciando vista de registro...")
+        setupClickListener()
+        observeRegisterState()
+    }
 
-        etUsername = findViewById(R.id.etUsername)
-        etFirstName = findViewById(R.id.etFirstName)
-        etLastName = findViewById(R.id.etLastName)
-        etEmail = findViewById(R.id.etEmail)
-        etPassword = findViewById(R.id.etPassword)
-        etConfirmPassword = findViewById(R.id.etConfirmPassword)
-        btnRegister = findViewById(R.id.btnRegister)
-        tvGoLogin = findViewById(R.id.tvGoLogin)
+    private fun setupClickListener() {
+        binding.btnRegister.setOnClickListener {
 
-        Log.d(TAG, "onCreate: Componentes inicializados correctamente")
+            val registerRequest = RegisterRequest(
+                firstName = binding.etFirstName.text.toString().trim(),
+                lastName = binding.etLastName.text.toString().trim(),
+                username = binding.etUsername.text.toString().trim(),
+                email = binding.etEmail.text.toString().trim(),
+                password = binding.etPassword.text.toString().trim(),
+            )
 
-        btnRegister.setOnClickListener { attemptRegister() }
-
-        tvGoLogin.setOnClickListener {
-            Log.d(TAG, "onCreate: Click en 'Ir al login'")
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            viewModel.onRegisterClicked(
+                registerRequest,
+                confirmPassword = binding.etConfirmPassword.text.toString().trim()
+            )
         }
     }
 
-    private fun attemptRegister() {
-        Log.d(TAG, "attemptRegister: Iniciando validaciones...")
-
-        val username = etUsername.text.toString().trim()
-        val firstName = etFirstName.text.toString().trim()
-        val lastName = etLastName.text.toString().trim()
-        val email = etEmail.text.toString().trim()
-        val password = etPassword.text.toString().trim()
-        val confirmPassword = etConfirmPassword.text.toString().trim()
-
-        Log.d(TAG, "Datos ingresados -> Nombre: $firstName | Apellido: $lastName | Email: $email")
-
-        if (username.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Log.w(TAG, "Campos vacíos detectados")
-            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Log.w(TAG, "Correo electrónico inválido: $email")
-            Toast.makeText(this, "Correo electrónico inválido", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if (password != confirmPassword) {
-            Log.w(TAG, "Las contraseñas no coinciden")
-            Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val user = User(
-            firstName = firstName,
-            lastName = lastName,
-            username = username,
-            email = email,
-            password = password
-        )
-
-        Log.d(TAG, "Usuario preparado para registro: $user")
-
+    private fun observeRegisterState() {
         lifecycleScope.launch {
-            try {
-                Log.d(TAG, "Llamando a authRepository.register()...")
-                val response = authRepository.register(user)
-                Log.d(TAG, "Respuesta recibida -> success=${response.success}, message=${response.message}")
-
-                if (response.success) {
-                    Toast.makeText(this@RegisterActivity, "Registro exitoso", Toast.LENGTH_SHORT).show()
-                    Log.i(TAG, "Registro exitoso. Finalizando Activity.")
-                    finish()
-                } else {
-                    Toast.makeText(this@RegisterActivity, response.message, Toast.LENGTH_SHORT).show()
-                    Log.w(TAG, "Error del servidor o validación: ${response.message}")
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.registerState.collect { state ->
+                    when (state) {
+                        is RegisterState.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.btnRegister.isEnabled = false
+                        }
+                        is RegisterState.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(this@RegisterActivity, state.message, Toast.LENGTH_LONG).show()
+                            finish()
+                        }
+                        is RegisterState.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.btnRegister.isEnabled = true
+                            Toast.makeText(this@RegisterActivity, state.message, Toast.LENGTH_LONG).show()
+                        }
+                        is RegisterState.Idle -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.btnRegister.isEnabled = true
+                        }
+                    }
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Error al registrar usuario", e)
-                Toast.makeText(
-                    this@RegisterActivity,
-                    "Error de conexión: ${e.localizedMessage}",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
     }
+
 }

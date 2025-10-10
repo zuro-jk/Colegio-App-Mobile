@@ -6,29 +6,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity">
-
-    <View
-        android:id="@+id/bgGradient"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_gradient" />
-
-    <ImageView
-        android:id="@+id/imgWaveTop"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/bg_wave_top"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imgWaveBottom"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/anim_wave_bottom"
-        app:layout_constraintBottom_toBottomOf="parent" />
+    tools:context=".ui.login.LoginActivity"
+    android:background="@drawable/bg_login_modern"
+    >
 
     <ImageView
         android:id="@+id/imgLogo"
@@ -136,5 +116,28 @@
                 android:focusable="true"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="#fff"/>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

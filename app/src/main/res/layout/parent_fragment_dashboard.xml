@@ -1,266 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:padding="16dp">
+    android:clipToPadding="false"
+    android:padding="16dp"
+    tools:context=".ui.parent.dashboard.DashboardFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Bienvenida -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="24dp">
+            android:layout_marginBottom="24dp">
 
             <ImageView
                 android:id="@+id/ivAvatar"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/ic_parent_avatar_24"
-                android:contentDescription="Avatar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:contentDescription="Avatar del padre"
                 android:scaleType="centerCrop"
-                android:background="@drawable/bg_circle_neu"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                tools:src="@drawable/ic_parent_avatar_24" />
 
             <TextView
                 android:id="@+id/tvWelcome"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="¡Hola, Juan!"
-                android:textSize="28sp"
+                android:layout_marginStart="16dp"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
                 android:textStyle="bold"
-                android:textColor="@color/on_background"
+                app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
                 app:layout_constraintStart_toEndOf="@id/ivAvatar"
                 app:layout_constraintTop_toTopOf="@id/ivAvatar"
-                app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
-                android:layout_marginStart="16dp"/>
+                tools:text="¡Hola, Carlos!" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Accesos rápidos -->
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resumen del Mes"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"/>
+
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="24dp"
-            android:weightSum="4"
-            android:paddingHorizontal="8dp">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp"
+            android:layout_marginBottom="24dp">
 
-            <!-- Botón Estudiantes -->
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="8dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/btnStudents"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    app:cardElevation="6dp"
-                    app:cardCornerRadius="35dp"
-                    android:backgroundTint="@color/surface">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:background="@color/secondary">
-
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/ic_student_24"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Estudiantes"
-                    android:textSize="13sp"
-                    android:textColor="@color/on_background"
-                    android:gravity="center"
-                    android:layout_marginTop="6dp"/>
-            </LinearLayout>
-
-            <!-- Botón Pagos -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="8dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/btnPayments"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    app:cardElevation="6dp"
-                    app:cardCornerRadius="35dp"
-                    android:backgroundTint="@color/surface">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:background="@color/accent_purple">
-
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/ic_payments_24"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pagos"
-                    android:textSize="13sp"
-                    android:textColor="@color/on_background"
-                    android:gravity="center"
-                    android:layout_marginTop="6dp"/>
-            </LinearLayout>
-
-            <!-- Botón Notificaciones -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="8dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/btnNotifications"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    app:cardElevation="6dp"
-                    app:cardCornerRadius="35dp"
-                    android:backgroundTint="@color/surface">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:background="@color/accent_red">
-
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/ic_notifications_24"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Avisos"
-                    android:textSize="13sp"
-                    android:textColor="@color/on_background"
-                    android:gravity="center"
-                    android:layout_marginTop="6dp"/>
-            </LinearLayout>
-
-            <!-- Botón Perfil -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="8dp">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/btnProfile"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    app:cardElevation="6dp"
-                    app:cardCornerRadius="35dp"
-                    android:backgroundTint="@color/surface">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:background="@color/accent_teal">
-
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/ic_account_circle_24"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Perfil"
-                    android:textSize="13sp"
-                    android:textColor="@color/on_background"
-                    android:gravity="center"
-                    android:layout_marginTop="6dp"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- Cards de información -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:divider="@android:color/transparent"
-            android:showDividers="middle"
-            android:dividerPadding="16dp">
-
-            <!-- Próximo pago -->
-            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="24dp"
-                android:backgroundTint="@color/surface">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <LinearLayout
+                    android:id="@+id/layoutOverduePayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp"
-                    android:background="@color/primary">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_error_rounded"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_error_24"
+                        app:tint="#fff"/>
 
                     <TextView
-                        android:text="Próximo pago"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvOverdueCount"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:layout_marginStart="8dp"
+                        android:textColor="#fff"
                         android:textStyle="bold"
-                        android:textColor="@color/on_primary"/>
-                    <TextView
-                        android:id="@+id/tvNextPayment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Cuota Octubre: S/ 120"
-                        android:textColor="@color/on_primary"/>
+                        tools:text="¡Atención! Tienes 2 pagos vencidos."/>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Próximo Vencimiento"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?android:attr/textColorSecondary"/>
+
+                <TextView
+                    android:id="@+id/tvNextPaymentInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textStyle="bold"
+                    tools:text="S/ 450.00 - Luis Ramírez"/>
+
+                <TextView
+                    android:id="@+id/tvNextPaymentDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    tools:text="Vence el 15 de Noviembre, 2025"/>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
 
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mis Hijos"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvStudents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_student_summary"
+            tools:itemCount="2"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp">
+
+            <TextView
+                android:id="@+id/tvAnnouncementsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Anuncios Recientes"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewAllAnnouncements"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver todos"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAnnouncements"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_announcement_summary"
+            tools:itemCount="3"/>
+
     </LinearLayout>
 </ScrollView>

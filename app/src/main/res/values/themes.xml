@@ -58,4 +58,10 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_jeyix</item>
+        <item name="postSplashScreenTheme">@style/Theme.Schooljeyix</item>
+    </style>
+
 </resources>

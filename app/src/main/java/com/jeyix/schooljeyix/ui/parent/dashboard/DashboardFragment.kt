@@ -10,8 +10,6 @@ import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.card.MaterialCardView
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.data.local.datastore.UserPreferences
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,15 +17,9 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
-
-    private lateinit var btnStudents: MaterialCardView
-    private lateinit var btnPayments: MaterialCardView
-    private lateinit var btnNotifications: MaterialCardView
-    private lateinit var btnProfile: MaterialCardView
 
     @Inject
     lateinit var userPreferences: UserPreferences
@@ -66,36 +58,10 @@ class DashboardFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.parent_fragment_dashboard, container, false)
 
-        // Referencias a los botones
-        btnStudents = view.findViewById(R.id.btnStudents)
-        btnPayments = view.findViewById(R.id.btnPayments)
-        btnNotifications = view.findViewById(R.id.btnNotifications)
-        btnProfile = view.findViewById(R.id.btnProfile)
-
-        // Configurar acciones
-        setupActions()
 
         return view
     }
 
-    private fun setupActions() {
-        val bottomNav = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_nav)
 
-        btnStudents.setOnClickListener {
-            bottomNav.selectedItemId = R.id.nav_parent_students
-        }
-
-        btnPayments.setOnClickListener {
-            bottomNav.selectedItemId = R.id.nav_parent_payments
-        }
-
-        btnNotifications.setOnClickListener {
-            findNavController().navigate(R.id.nav_parent_notifications)
-        }
-
-        btnProfile.setOnClickListener {
-            findNavController().navigate(R.id.nav_parent_profile)
-        }
-    }
 
 }

@@ -1,6 +1,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Fondo degradado -->
     <item>
         <shape android:shape="rectangle">
             <gradient
@@ -10,14 +9,10 @@
         </shape>
     </item>
 
-    <!-- Ola decorativa arriba -->
-    <item
-        android:drawable="@drawable/bg_wave_top"
-        android:gravity="top" />
-
-    <!-- Ola decorativa abajo -->
     <item
         android:drawable="@drawable/bg_wave_bottom"
+        android:gravity="top" />
+    <item
+        android:drawable="@drawable/bg_wave_top"
         android:gravity="bottom" />
-
 </layer-list>
