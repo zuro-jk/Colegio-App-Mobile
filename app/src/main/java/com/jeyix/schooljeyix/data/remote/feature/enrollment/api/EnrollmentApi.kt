@@ -20,7 +20,7 @@ interface EnrollmentApi {
     ): Response<ApiResponse<EnrollmentResponse>>
 
     @GET("enrollments/my-enrollments")
-    suspend fun getAllEnrollmentsAuth(): Response<ApiResponse<List<EnrollmentResponse>>>
+    suspend fun getMyEnrollments(): Response<ApiResponse<List<EnrollmentResponse>>>
 
     @POST("enrollments")
     suspend fun createEnrollment(
