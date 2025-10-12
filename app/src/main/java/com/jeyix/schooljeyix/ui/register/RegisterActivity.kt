@@ -55,6 +55,12 @@ class RegisterActivity : AppCompatActivity() {
                 confirmPassword = binding.etConfirmPassword.text.toString().trim()
             )
         }
+
+        binding.tvGoLogin.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun observeRegisterState() {

@@ -2,13 +2,20 @@ package com.jeyix.schooljeyix.data.di
 
 import com.jeyix.schooljeyix.data.remote.feature.auth.api.AuthApi
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.api.EnrollmentApi
+import com.jeyix.schooljeyix.data.remote.feature.parent.api.ParentApi
 import com.jeyix.schooljeyix.data.remote.feature.student.api.StudentApi
+import com.jeyix.schooljeyix.data.remote.feature.users.api.UserApi
 import com.jeyix.schooljeyix.data.repository.auth.AuthRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.enrollment.EnrollmentRepositoryImpl
+import com.jeyix.schooljeyix.data.repository.parent.ParentRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.student.StudentRepositoryImpl
+import com.jeyix.schooljeyix.data.repository.users.UserRepositoryImpl
 import com.jeyix.schooljeyix.domain.usecase.auth.AuthRepository
 import com.jeyix.schooljeyix.domain.usecase.enrollment.EnrollmentRepository
+import com.jeyix.schooljeyix.domain.usecase.parent.ParentRepository
 import com.jeyix.schooljeyix.domain.usecase.student.StudentRepository
+import com.jeyix.schooljeyix.domain.usecase.users.UserRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,23 +24,35 @@ import jakarta.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+abstract class RepositoryModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideAuthRepository(api: AuthApi): AuthRepository {
-        return AuthRepositoryImpl(api)
-    }
+    abstract fun bindAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideEnrollmentRepository(api: EnrollmentApi): EnrollmentRepository {
-        return EnrollmentRepositoryImpl(api)
-    }
+    abstract fun bindEnrollmentRepository(
+        enrollmentRepositoryImpl: EnrollmentRepositoryImpl
+    ): EnrollmentRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideStudentRepository(api: StudentApi): StudentRepository {
-        return StudentRepositoryImpl(api)
-    }
+    abstract fun bindStudentRepository(
+        studentRepositoryImpl: StudentRepositoryImpl
+    ): StudentRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindParentRepository(
+        parentRepositoryImpl: ParentRepositoryImpl
+    ): ParentRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(
+        userRepositoryImpl: UserRepositoryImpl
+    ): UserRepository
 }

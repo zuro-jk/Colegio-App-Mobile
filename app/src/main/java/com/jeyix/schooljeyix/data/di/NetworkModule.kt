@@ -1,13 +1,19 @@
 package com.jeyix.schooljeyix.data.di
 
+import android.content.Context
 import com.jeyix.schooljeyix.data.local.datastore.UserPreferences
 import com.jeyix.schooljeyix.data.remote.core.AuthInterceptor
+import com.jeyix.schooljeyix.data.remote.core.UnauthorizedInterceptor
 import com.jeyix.schooljeyix.data.remote.feature.auth.api.AuthApi
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.api.EnrollmentApi
+import com.jeyix.schooljeyix.data.remote.feature.parent.api.ParentApi
 import com.jeyix.schooljeyix.data.remote.feature.student.api.StudentApi
+import com.jeyix.schooljeyix.data.remote.feature.users.api.UserApi
+import com.jeyix.schooljeyix.domain.usecase.auth.LogoutUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import jakarta.inject.Singleton
 import okhttp3.OkHttpClient
@@ -27,12 +33,25 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
+    fun provideUnauthorizedInterceptor(
+        @ApplicationContext context: Context,
+        userPreferences: UserPreferences
+    ): UnauthorizedInterceptor {
+        return UnauthorizedInterceptor(context, userPreferences)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        unauthorizedInterceptor: UnauthorizedInterceptor
+    ): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
+            .addInterceptor(unauthorizedInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
     }
@@ -56,4 +75,12 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideStudentApi(retrofit: Retrofit): StudentApi = retrofit.create(StudentApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideParentApi(retrofit: Retrofit): ParentApi = retrofit.create(ParentApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 }

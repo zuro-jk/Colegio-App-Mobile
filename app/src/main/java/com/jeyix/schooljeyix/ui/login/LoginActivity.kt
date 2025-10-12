@@ -11,8 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.jeyix.schooljeyix.data.remote.feature.auth.request.LoginRequest
 import com.jeyix.schooljeyix.databinding.ActivityLoginBinding
+import com.jeyix.schooljeyix.ui.admin.AdminMainActivity
 import com.jeyix.schooljeyix.ui.parent.ParentMainActivity
 import com.jeyix.schooljeyix.ui.register.RegisterActivity
+import com.jeyix.schooljeyix.ui.student.StudentMainActivity
+import com.jeyix.schooljeyix.ui.teacher.TeacherMainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -59,21 +62,30 @@ class LoginActivity : AppCompatActivity() {
                         is LoginState.Success -> {
                             binding.progressBar.visibility = View.GONE
                             Toast.makeText(this@LoginActivity, "Login exitoso", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this@LoginActivity, ParentMainActivity::class.java))
-                            finish()
+
+                            when (state.userRole) {
+                                "ROLE_PARENT" -> navigateToAndFinish(ParentMainActivity::class.java)
+                                "ROLE_ADMIN" -> navigateToAndFinish(AdminMainActivity::class.java)
+                                "ROLE_TEACHER" -> navigateToAndFinish(TeacherMainActivity::class.java)
+                                 "ROLE_STUDENT" -> navigateToAndFinish(StudentMainActivity::class.java)
+                                else -> {
+                                    Toast.makeText(this@LoginActivity, "Rol de usuario no reconocido.", Toast.LENGTH_LONG).show()
+                                    binding.btnLogin.isEnabled = true
+                                }
+                            }
                         }
                         is LoginState.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.btnLogin.isEnabled = true
-                            Toast.makeText(this@LoginActivity, state.message, Toast.LENGTH_LONG).show()
                         }
                         is LoginState.Idle -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.btnLogin.isEnabled = true
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun <T : AppCompatActivity> navigateToAndFinish(activityClass: Class<T>) {
+        startActivity(Intent(this, activityClass))
+        finish()
     }
 }

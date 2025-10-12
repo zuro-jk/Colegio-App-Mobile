@@ -32,13 +32,17 @@ class StudentGridAdapter(
             binding.tvStudentName.text = student.fullName
             binding.tvStudentGrade.text = student.gradeLevel
 
-//            Glide.with(itemView.context)
-//                .load(student.prof)
-//                .placeholder(R.drawable.ic_student_24)
-//                .error(R.drawable.ic_student_24)
-//                .into(binding.ivStudentAvatar)
+//            val avatarUrl = if (!student.profileImageUrl.isNullOrBlank()) {
+//                student.profileImageUrl
+//            } else {
+            val avatarUrl = "https://api.dicebear.com/8.x/adventurer/svg?seed=${student.username}"
+//            }
 
-            binding.chipStatus.text = "Al día"
+            Glide.with(itemView.context)
+                .load(avatarUrl)
+                .placeholder(R.drawable.ic_student_24)
+                .error(R.drawable.ic_student_24)
+                .into(binding.ivStudentAvatar)
 
             itemView.setOnClickListener {
                 onStudentClick(student)

@@ -1,4 +1,7 @@
 package com.jeyix.schooljeyix.data.remote.feature.parent.response
 
-class ParentResponse {
-}
+data class ParentResponse(
+    val id: Long,
+    val user: UserResponseSummary
+)
+

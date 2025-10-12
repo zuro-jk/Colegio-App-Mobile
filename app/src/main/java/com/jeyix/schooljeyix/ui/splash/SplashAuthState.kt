@@ -2,6 +2,6 @@ package com.jeyix.schooljeyix.ui.splash
 
 sealed class SplashAuthState {
     object Loading : SplashAuthState()
-    object Authenticated : SplashAuthState()
+    data class Authenticated(val userRole: String) : SplashAuthState()
     object Unauthenticated : SplashAuthState()
 }

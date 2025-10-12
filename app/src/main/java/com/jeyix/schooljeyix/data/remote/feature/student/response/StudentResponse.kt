@@ -7,5 +7,6 @@ data class StudentResponse (
     val gradeLevel: String,
     val section: String,
     val parentId: Long,
-    val parentName: String
+    val parentName: String,
+    val profileImageUrl: String?
 )

@@ -6,37 +6,62 @@ import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.PaymentSumm
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.StudentSummary as ApiStudentSummary
 import com.jeyix.schooljeyix.domain.model.PaymentSummary
 import com.jeyix.schooljeyix.domain.usecase.enrollment.GetMyEnrollmentsUseCase
+import com.jeyix.schooljeyix.domain.usecase.student.GetMyStudentsUseCase
 import com.jeyix.schooljeyix.domain.util.Resource
 import jakarta.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import java.time.LocalDate
 
 class GetDashboardDataUseCase @Inject constructor(
-    private val getMyEnrollmentsUseCase: GetMyEnrollmentsUseCase
+    private val getMyEnrollmentsUseCase: GetMyEnrollmentsUseCase,
+    private val getMyStudentsUseCase: GetMyStudentsUseCase
 ) {
 
     suspend operator fun invoke(): Resource<DashboardRemoteData> {
-        val enrollmentsResult = getMyEnrollmentsUseCase()
+        return try {
+            coroutineScope {
+                val studentsDeferred = async { getMyStudentsUseCase() }
+                val enrollmentsDeferred = async { getMyEnrollmentsUseCase() }
 
-        Log.d("DashboardDebug", "Resultado de GetMyEnrollmentsUseCase: $enrollmentsResult")
+                val studentsResult = studentsDeferred.await()
+                val enrollmentsResult = enrollmentsDeferred.await()
 
-        return when (enrollmentsResult) {
-            is Resource.Success -> {
-                val enrollments = enrollmentsResult.data!!
+                if (studentsResult is Resource.Error) {
+                    return@coroutineScope Resource.Error(studentsResult.message ?: "Error al cargar estudiantes.")
+                }
+                if (enrollmentsResult is Resource.Error) {
+                    return@coroutineScope Resource.Error(enrollmentsResult.message ?: "Error al cargar matrículas.")
+                }
+
+                val studentsFromApi = (studentsResult as Resource.Success).data!!
+                val enrollments = (enrollmentsResult as Resource.Success).data!!
+
+                val processedStudents = studentsFromApi.map { student ->
+                    val avatarUrl = if (!student.profileImageUrl.isNullOrBlank()) {
+                        student.profileImageUrl
+                    } else {
+                        "https://api.dicebear.com/8.x/adventurer/svg?seed=${student.username}"
+                    }
+                    ApiStudentSummary(
+                        id = student.id,
+                        fullName = student.fullName,
+                        gradeLevel = student.gradeLevel,
+                        profileImageUrl = avatarUrl
+                    )
+                }
 
                 val remoteData = DashboardRemoteData(
                     nextPayment = findNextPaymentFrom(enrollments),
                     overduePaymentsCount = countOverduePaymentsIn(enrollments),
-                    students = extractStudentsFrom(enrollments)
+                    students = processedStudents
                 )
                 Resource.Success(remoteData)
             }
-            is Resource.Error -> {
-                Resource.Error(enrollmentsResult.message ?: "Ocurrió un error desconocido")
-            }
-            is Resource.Loading -> Resource.Loading()
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Ocurrió un error inesperado")
         }
     }
-
     /**
      * Extrae una lista única de estudiantes a partir de las matrículas.
      */
@@ -49,6 +74,7 @@ class GetDashboardDataUseCase @Inject constructor(
                     id = apiStudent.id,
                     fullName = apiStudent.fullName,
                     gradeLevel = apiStudent.gradeLevel,
+                    profileImageUrl = apiStudent.profileImageUrl
                 )
             }
     }

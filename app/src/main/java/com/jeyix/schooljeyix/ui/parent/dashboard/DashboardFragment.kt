@@ -22,6 +22,7 @@ import com.jeyix.schooljeyix.databinding.ParentFragmentDashboardBinding
 import com.jeyix.schooljeyix.domain.model.PaymentSummary
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
@@ -92,7 +93,7 @@ class DashboardFragment : Fragment() {
             binding.tvNextPaymentInfo.text = "S/ ${nextPayment.amount} - ${nextPayment.studentName}"
 
             // CORRECCIÓN: Parseamos el String a LocalDate ANTES de formatearlo
-            val formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy")
+            val formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy", Locale("es", "ES"))
             val date = LocalDate.parse(nextPayment.dueDate)
             binding.tvNextPaymentDate.text = "Vence el ${date.format(formatter)}"
         } else {

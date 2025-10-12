@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin_nav_graph"
+    app:startDestination="@id/nav_admin_dashboard">
+
+    <fragment
+        android:id="@+id/nav_admin_dashboard"
+        android:name="com.jeyix.schooljeyix.ui.admin.dashboard.DashboardFragment"
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_admin_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_admin_users"
+        android:name="com.jeyix.schooljeyix.ui.admin.users.UsersFragment"
+        android:label="Gestión de Usuarios"
+        tools:layout="@layout/fragment_admin_users" />
+
+    <fragment
+        android:id="@+id/nav_admin_finance"
+        android:name="com.jeyix.schooljeyix.ui.admin.enrollments.EnrollmentsFragment"
+        android:label="Gestión Financiera"
+        tools:layout="@layout/fragment_admin_enrollments" />
+
+    <fragment
+        android:id="@+id/nav_admin_communications"
+        android:name="com.jeyix.schooljeyix.ui.admin.notifications.NotificationsFragment"
+        android:label="Comunicaciones"
+        tools:layout="@layout/fragment_admin_notifications" />
+
+</navigation>

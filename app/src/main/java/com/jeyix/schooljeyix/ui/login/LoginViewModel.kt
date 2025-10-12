@@ -34,7 +34,17 @@ class LoginViewModel @Inject constructor(
                         sessionId = authData.sessionId,
                         user = authData.user
                     )
-                    _loginState.value = LoginState.Success
+
+                    val roles = authData.user.roles
+                    val primaryRole = when {
+                        (roles?.contains("ROLE_ADMIN") ?: false) -> "ROLE_ADMIN"
+                        (roles?.contains("ROLE_TEACHER") ?: false) -> "ROLE_TEACHER"
+                        (roles?.contains("ROLE_PARENT") ?: false) -> "ROLE_PARENT"
+                        (roles?.contains("ROLE_STUDENT") ?: false) -> "ROLE_STUDENT"
+                        else -> "UNKNOWN"
+                    }
+
+                    _loginState.value = LoginState.Success(primaryRole)
                 }
                 is Resource.Error -> {
                     _loginState.value = LoginState.Error(result.message)

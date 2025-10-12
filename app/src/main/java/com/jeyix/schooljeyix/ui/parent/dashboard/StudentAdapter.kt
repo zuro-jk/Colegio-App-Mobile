@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.StudentSummary
 
 import com.jeyix.schooljeyix.databinding.ItemStudentSummaryBinding
@@ -31,6 +33,12 @@ class StudentAdapter: ListAdapter<StudentSummary, StudentAdapter.StudentViewHold
         fun bind(student: StudentSummary) {
             binding.tvStudentName.text = student.fullName
             binding.tvStudentGrade.text = student.gradeLevel
+
+            Glide.with(itemView.context)
+                .load(student.profileImageUrl)
+                .placeholder(R.drawable.ic_student_24)
+                .error(R.drawable.ic_student_24)
+                .into(binding.ivStudentAvatar)
         }
     }
 

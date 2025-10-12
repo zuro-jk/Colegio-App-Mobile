@@ -89,6 +89,9 @@ dependencies {
     // Desugar
     coreLibraryDesugaring(libs.android.desugar.jdk.libs)
 
+    // Charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

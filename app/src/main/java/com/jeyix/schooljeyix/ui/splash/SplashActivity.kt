@@ -6,24 +6,22 @@ import android.animation.PropertyValuesHolder
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AnticipateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.jeyix.schooljeyix.R
+import com.jeyix.schooljeyix.ui.admin.AdminMainActivity
 import com.jeyix.schooljeyix.ui.login.LoginActivity
 import com.jeyix.schooljeyix.ui.parent.ParentMainActivity
+import com.jeyix.schooljeyix.ui.student.StudentMainActivity
+import com.jeyix.schooljeyix.ui.teacher.TeacherMainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -38,7 +36,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         splashScreen.setKeepOnScreenCondition {
-            viewModel.authState.value == SplashAuthState.Loading
+            viewModel.authState.value is SplashAuthState.Loading
         }
 
         observeAuthState()
@@ -48,13 +46,22 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authState.collect { state ->
-                    if (state != SplashAuthState.Loading) {
-                        val destination = if (state is SplashAuthState.Authenticated) {
-                            ParentMainActivity::class.java
-                        } else {
-                            LoginActivity::class.java
+                    val destination: Class<*>? = when (state) {
+                        is SplashAuthState.Authenticated -> {
+                            when (state.userRole) {
+                                "ROLE_PARENT" -> ParentMainActivity::class.java
+                                "ROLE_ADMIN" -> AdminMainActivity::class.java
+                                "ROLE_TEACHER" -> TeacherMainActivity::class.java
+                                "ROLE_STUDENT" -> StudentMainActivity::class.java
+                                else -> LoginActivity::class.java
+                            }
                         }
-                        startExitAnimation(destination)
+                        is SplashAuthState.Unauthenticated -> LoginActivity::class.java
+                        is SplashAuthState.Loading -> null
+                    }
+
+                    destination?.let {
+                        startExitAnimation(it)
                     }
                 }
             }

@@ -26,9 +26,18 @@ class SplashViewModel @Inject constructor(
     private fun checkAuthStatus() {
         viewModelScope.launch {
             val token = userPreferences.accessToken.first()
+            val user = userPreferences.user.first()
 
-            if (!token.isNullOrBlank()) {
-                _authState.value = SplashAuthState.Authenticated
+            if (!token.isNullOrBlank() && user != null) {
+                val roles = user.roles
+                val primaryRole = when {
+                    (roles?.contains("ROLE_ADMIN") ?: false) -> "ROLE_ADMIN"
+                    (roles?.contains("ROLE_TEACHER") ?: false) -> "ROLE_TEACHER"
+                    (roles?.contains("ROLE_PARENT") ?: false) -> "ROLE_PARENT"
+                    (roles?.contains("ROLE_STUDENT") ?: false) -> "ROLE_STUDENT"
+                    else -> "UNKNOWN"
+                }
+                _authState.value = SplashAuthState.Authenticated(primaryRole)
             } else {
                 _authState.value = SplashAuthState.Unauthenticated
             }

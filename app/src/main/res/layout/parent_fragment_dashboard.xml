@@ -19,27 +19,44 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp">
 
-            <ImageView
-                android:id="@+id/ivAvatar"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:contentDescription="Avatar del padre"
-                android:scaleType="centerCrop"
+                app:cardCornerRadius="32dp"
+                app:cardElevation="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_parent_avatar_24" />
+                app:strokeColor="#000"
+                android:backgroundTint="@color/primary"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="Avatar del padre"
+                    android:scaleType="centerCrop"
+                    tools:src="@drawable/ic_parent_avatar_24" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/tvWelcome"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="18dp"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/ivAvatar"
-                app:layout_constraintStart_toEndOf="@id/ivAvatar"
-                app:layout_constraintTop_toTopOf="@id/ivAvatar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/materialCardView"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="¡Hola, Carlos!" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -47,18 +64,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Resumen del Mes"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
             android:layout_marginStart="4dp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp"
+            android:text="Resumen del Mes"
+            android:textAppearance="?attr/textAppearanceTitleMedium" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:strokeWidth="0dp"
-            android:layout_marginBottom="24dp">
+            android:backgroundTint="@color/secondary"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,11 +88,11 @@
                     android:id="@+id/layoutOverduePayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_error_rounded"
-                    android:padding="12dp"
                     android:layout_marginBottom="16dp"
+                    android:background="@drawable/bg_error_rounded"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
                     android:visibility="gone"
                     tools:visibility="visible">
 
@@ -82,17 +100,17 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_error_24"
-                        app:tint="#fff"/>
+                        app:tint="#fff" />
 
                     <TextView
                         android:id="@+id/tvOverdueCount"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
+                        android:layout_weight="1"
                         android:textColor="#fff"
                         android:textStyle="bold"
-                        tools:text="¡Atención! Tienes 2 pagos vencidos."/>
+                        tools:text="¡Atención! Tienes 2 pagos vencidos." />
                 </LinearLayout>
 
                 <TextView
@@ -100,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:text="Próximo Vencimiento"
                     android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="?android:attr/textColorSecondary"/>
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tvNextPaymentInfo"
@@ -109,14 +127,18 @@
                     android:layout_marginTop="4dp"
                     android:textAppearance="?attr/textAppearanceTitleMedium"
                     android:textStyle="bold"
-                    tools:text="S/ 450.00 - Luis Ramírez"/>
+                    tools:text="S/ 450.00 - Luis Ramírez"
+                    android:textColor="@color/white"
+                    />
 
                 <TextView
                     android:id="@+id/tvNextPaymentDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
-                    tools:text="Vence el 15 de Noviembre, 2025"/>
+                    tools:text="Vence el 15 de Noviembre, 2025"
+                    android:textColor="@color/white"
+                    />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -125,10 +147,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mis Hijos"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
             android:layout_marginStart="4dp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp"
+            android:text="Mis Hijos"
+            android:textAppearance="?attr/textAppearanceTitleMedium" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvStudents"
@@ -137,8 +159,8 @@
             android:clipToPadding="false"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_student_summary"
-            tools:itemCount="2"/>
+            tools:itemCount="2"
+            tools:listitem="@layout/item_student_summary" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -149,12 +171,12 @@
                 android:id="@+id/tvAnnouncementsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:text="Anuncios Recientes"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnViewAllAnnouncements"
@@ -162,9 +184,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ver todos"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -174,8 +196,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_announcement_summary"
-            tools:itemCount="3"/>
+            tools:itemCount="3"
+            tools:listitem="@layout/item_announcement_summary" />
 
     </LinearLayout>
 </ScrollView>
