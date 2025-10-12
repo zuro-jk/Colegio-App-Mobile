@@ -25,52 +25,63 @@
                 android:text="Pagos y Matrículas"
                 android:textAppearance="?attr/textAppearanceHeadlineSmall"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="12dp"
+                android:textColor="?attr/colorOnBackground"
+                />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
-                app:cardBackgroundColor="@color/primary">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="@color/primary"
+                android:layout_marginBottom="8dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp">
+                    android:padding="18dp">
 
                     <TextView
                         android:id="@+id/tvTotalDueLabel"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="Total Pendiente este Mes"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
                         android:textColor="@color/on_primary"
-                        app:layout_constraintStart_toStartOf="@+id/tvTotalDueAmount"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnPayAll"
+                        app:layout_constraintHorizontal_bias="0"
+                        />
 
                     <TextView
                         android:id="@+id/tvTotalDueAmount"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="6dp"
                         android:textAppearance="?attr/textAppearanceHeadlineMedium"
                         android:textColor="@color/on_primary"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tvTotalDueLabel"
-                        tools:text="S/ 900.00" />
+                        app:layout_constraintEnd_toStartOf="@+id/btnPayAll"
+                        />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnPayAll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Pagar todo"
-                        app:backgroundTint="@color/secondary"
                         app:icon="@drawable/ic_payments_24"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:backgroundTint="@color/secondary"
+                        android:textColor="@color/on_secondary"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginStart="12dp"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -83,7 +94,8 @@
         android:id="@+id/rvPayments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
