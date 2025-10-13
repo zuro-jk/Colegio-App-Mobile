@@ -5,6 +5,7 @@ import android.net.Uri
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.UserProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.api.UserApi
 import com.jeyix.schooljeyix.data.remote.feature.users.request.ChangePasswordRequest
+import com.jeyix.schooljeyix.data.remote.feature.users.request.DeviceTokenRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.request.UpdateProfileRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UpdateProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UserSessionResponse
@@ -69,6 +70,19 @@ class UserRepositoryImpl @Inject constructor(
                 Resource.Success(response.body()!!.data!!)
             } else {
                 Resource.Error(response.errorBody()?.string() ?: "Usuario no encontrado.")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Error de conexión.")
+        }
+    }
+
+    override suspend fun updateDeviceToken(deviceTokenRequest: DeviceTokenRequest): Resource<Unit> {
+        return try {
+            val response = api.updateDeviceToken(deviceTokenRequest)
+            if (response.isSuccessful) {
+                Resource.Success(Unit)
+            } else {
+                Resource.Error(response.errorBody()?.string() ?: "Error al actualizar el token del dispositivo.")
             }
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Error de conexión.")

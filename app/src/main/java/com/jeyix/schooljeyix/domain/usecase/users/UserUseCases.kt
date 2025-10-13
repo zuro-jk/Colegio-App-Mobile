@@ -3,6 +3,7 @@ package com.jeyix.schooljeyix.domain.usecase.users
 import android.net.Uri
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.UserProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.request.ChangePasswordRequest
+import com.jeyix.schooljeyix.data.remote.feature.users.request.DeviceTokenRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.request.UpdateProfileRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UpdateProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UserSessionResponse
@@ -56,6 +57,15 @@ class UserUseCases @Inject constructor(
         )
 
         return repository.changePassword(requestDto)
+    }
+
+    suspend fun updateDeviceToken(token: String): Resource<Unit> {
+        if (token.isBlank()) {
+            return Resource.Error("Token de dispositivo no válido.")
+        }
+
+        val request = DeviceTokenRequest(deviceToken = token)
+        return repository.updateDeviceToken(request)
     }
 
     suspend fun updateProfile(request: UpdateProfileRequest): Resource<UpdateProfileResponse> {

@@ -54,30 +54,28 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loginState.collect { state ->
+                    binding.progressBar.visibility = if (state is LoginState.Loading) View.VISIBLE else View.GONE
+                    binding.btnLogin.isEnabled = state !is LoginState.Loading
+
                     when (state) {
-                        is LoginState.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                            binding.btnLogin.isEnabled = false
-                        }
                         is LoginState.Success -> {
-                            binding.progressBar.visibility = View.GONE
                             Toast.makeText(this@LoginActivity, "Login exitoso", Toast.LENGTH_SHORT).show()
 
                             when (state.userRole) {
                                 "ROLE_PARENT" -> navigateToAndFinish(ParentMainActivity::class.java)
                                 "ROLE_ADMIN" -> navigateToAndFinish(AdminMainActivity::class.java)
                                 "ROLE_TEACHER" -> navigateToAndFinish(TeacherMainActivity::class.java)
-                                 "ROLE_STUDENT" -> navigateToAndFinish(StudentMainActivity::class.java)
+                                "ROLE_STUDENT" -> navigateToAndFinish(StudentMainActivity::class.java)
                                 else -> {
                                     Toast.makeText(this@LoginActivity, "Rol de usuario no reconocido.", Toast.LENGTH_LONG).show()
-                                    binding.btnLogin.isEnabled = true
                                 }
                             }
                         }
                         is LoginState.Error -> {
+                            Toast.makeText(this@LoginActivity, state.message, Toast.LENGTH_LONG).show()
                         }
-                        is LoginState.Idle -> {
-                        }
+                        is LoginState.Loading -> {}
+                        is LoginState.Idle -> {}
                     }
                 }
             }

@@ -3,6 +3,7 @@ package com.jeyix.schooljeyix.data.remote.feature.users.api
 import com.jeyix.schooljeyix.data.remote.core.ApiResponse
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.UserProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.request.ChangePasswordRequest
+import com.jeyix.schooljeyix.data.remote.feature.users.request.DeviceTokenRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.request.UpdateProfileRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UpdateProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UserSessionResponse
@@ -11,6 +12,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -30,6 +32,11 @@ interface UserApi {
     suspend fun getUserById(
         @Path("id") userId: Long
     ): Response<ApiResponse<UserProfileResponse>>
+
+    @POST("users/device-token")
+    suspend fun updateDeviceToken(
+        deviceTokenRequest: DeviceTokenRequest
+    ): Response<ApiResponse<Unit>>
 
     @PUT("users/change-password")
     suspend fun changePassword(
