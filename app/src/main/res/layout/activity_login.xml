@@ -8,58 +8,81 @@
     android:layout_height="match_parent"
     tools:context=".ui.login.LoginActivity"
     android:background="@drawable/bg_login_modern"
-    >
+    android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/imgLogo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/logo_jeyix"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/logoCard"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        app:cardCornerRadius="1000dp"
+        app:cardElevation="20dp"
+        app:cardBackgroundColor="@color/primary"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/cardContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp" />
+        app:layout_constraintBottom_toTopOf="@id/cardContainer"
+        android:layout_marginTop="50dp">
+
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/logo_jeyix_circular"
+            android:layout_gravity="center"
+            android:elevation="10dp"/>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:padding="32dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="12dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="32dp"
+        app:cardCornerRadius="40dp"
+        app:cardElevation="25dp"
         app:cardBackgroundColor="@color/surface"
-        app:layout_constraintTop_toBottomOf="@id/imgLogo"
+        app:layout_constraintTop_toBottomOf="@id/logoCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.35">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="32sp"
-            android:gravity="center_horizontal">
+            android:paddingHorizontal="32dp">
 
             <TextView
                 android:id="@+id/tvLoginTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
+                android:elevation="4dp"
+                android:letterSpacing="0.03"
                 android:text="@string/login_title"
                 android:textColor="@color/primary"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="24dp" />
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
                 style="@style/Widget.Schooljeyix.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:hint="Usuario o correo electrónico"
-                android:layout_marginBottom="16dp"
+                android:paddingVertical="4dp"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidthFocused="3dp"
                 app:startIconDrawable="@drawable/ic_person_24"
                 app:startIconTint="@color/primary">
 
@@ -67,8 +90,12 @@
                     android:id="@+id/etEmail"
                     style="@style/Widget.Schooljeyix.TextInputEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress|textPersonName"/>
+                    android:layout_height="60dp"
+                    android:inputType="textEmailAddress|textPersonName"
+                    android:paddingVertical="8dp"
+                    android:paddingStart="16dp"
+                    android:textSize="16sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -76,8 +103,15 @@
                 style="@style/Widget.Schooljeyix.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
                 android:hint="@string/login_password"
-                android:layout_marginBottom="24dp"
+                android:paddingVertical="4dp"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidthFocused="3dp"
                 app:endIconMode="password_toggle"
                 app:startIconDrawable="@drawable/ic_lock_24"
                 app:startIconTint="@color/primary">
@@ -86,34 +120,51 @@
                     android:id="@+id/etPassword"
                     style="@style/Widget.Schooljeyix.TextInputEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"/>
+                    android:layout_height="60dp"
+                    android:inputType="textPassword"
+                    android:paddingVertical="8dp"
+                    android:paddingStart="16dp"
+                    android:textSize="16sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
                 style="@style/Widget.Schooljeyix.Button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="62dp"
+                android:layout_marginBottom="15dp"
+                android:backgroundTint="@color/primary"
+                android:elevation="12dp"
+                android:letterSpacing="0.02"
                 android:text="@string/login_button"
-                android:layout_marginBottom="16dp"
+                android:textColor="@color/on_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:translationZ="12dp"
+                app:cornerRadius="20dp"
                 app:icon="@drawable/ic_login_24"
                 app:iconGravity="textStart"
-                app:iconTint="@color/on_primary"
-                android:backgroundTint="@color/primary"
-                android:textColor="@color/on_primary"/>
+                app:iconPadding="12dp"
+                app:iconTint="@color/on_primary" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/tvRegister"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_height="50dp"
+                android:layout_marginBottom="30dp"
+                android:backgroundTint="@android:color/transparent"
                 android:text="@string/login_register_prompt"
-                android:textSize="14sp"
                 android:textColor="@color/secondary"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                android:clickable="true"
-                android:focusable="true"/>
+                app:cornerRadius="16dp"
+                app:icon="@drawable/ic_person_add_24"
+                app:iconTint="@color/secondary"
+                app:strokeColor="@color/secondary"
+                app:strokeWidth="2dp" />
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -121,7 +172,7 @@
         android:id="@+id/loadingOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#80000000"
+        android:background="#CC000000"
         android:clickable="true"
         android:focusable="true"
         android:visibility="gone"
@@ -131,12 +182,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="gone">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
-            android:indeterminateTint="#fff"/>
+            app:cardCornerRadius="30dp"
+            app:cardElevation="16dp"
+            app:cardBackgroundColor="@color/surface"
+            android:elevation="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="20dp">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:indeterminateTint="@color/primary"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cargando..."
+                    android:textColor="@color/primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </FrameLayout>
 
