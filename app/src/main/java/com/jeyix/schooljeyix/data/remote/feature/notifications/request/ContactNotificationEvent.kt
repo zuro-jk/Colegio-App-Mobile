@@ -1,12 +1,12 @@
 package com.jeyix.schooljeyix.data.remote.feature.notifications.request
 
 data class ContactNotificationEvent(
-    val userId: Long,
     val subject: String,
     val message: String,
-    val actionUrl: String,
-    val name: String,
-    val email: String,
-    val phone: String
+    val userId: Long? = null,
+    val actionUrl: String? = null,
+    val name: String? = null,
+    val email: String? = null,
+    val phone: String? = null
 )
 
