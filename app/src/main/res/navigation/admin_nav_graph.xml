@@ -15,7 +15,23 @@
         android:id="@+id/nav_admin_users"
         android:name="com.jeyix.schooljeyix.ui.admin.users.UsersFragment"
         android:label="Gestión de Usuarios"
-        tools:layout="@layout/fragment_admin_users" />
+        tools:layout="@layout/fragment_admin_users" >
+
+        <action
+            android:id="@+id/action_usersFragment_to_editParentFragment"
+            app:destination="@id/adminEditParentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminEditParentFragment"
+        android:name="com.jeyix.schooljeyix.ui.admin.users.parent.edit.AdminEditParentFragment"
+        android:label="Editar Padre"
+        tools:layout="@layout/fragment_admin_edit_parent">
+
+        <argument
+            android:name="parentId"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_admin_finance"

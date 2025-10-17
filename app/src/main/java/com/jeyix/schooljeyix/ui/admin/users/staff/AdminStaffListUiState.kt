@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.ui.admin.users.adminTab
+package com.jeyix.schooljeyix.ui.admin.users.staff
 
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.UserProfileResponse
 

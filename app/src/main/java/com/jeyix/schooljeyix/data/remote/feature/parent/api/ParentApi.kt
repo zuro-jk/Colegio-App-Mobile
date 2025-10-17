@@ -2,6 +2,7 @@ package com.jeyix.schooljeyix.data.remote.feature.parent.api
 
 import com.jeyix.schooljeyix.data.remote.core.ApiResponse
 import com.jeyix.schooljeyix.data.remote.feature.parent.request.ParentRequest
+import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentDetailResponse
 import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -20,6 +21,11 @@ interface ParentApi {
     suspend fun getParentById(
         @Path("id") id: Long
     ): Response<ApiResponse<ParentResponse>>
+
+    @GET("parents/{id}/details")
+    suspend fun getParentByIdDetails(
+        @Path("id") id: Long
+    ): Response<ApiResponse<ParentDetailResponse>>
 
     @POST("parents")
     suspend fun addParent(

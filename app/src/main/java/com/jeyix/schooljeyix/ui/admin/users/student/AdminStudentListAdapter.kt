@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.ui.admin.users.studentTab
+package com.jeyix.schooljeyix.ui.admin.users.student
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

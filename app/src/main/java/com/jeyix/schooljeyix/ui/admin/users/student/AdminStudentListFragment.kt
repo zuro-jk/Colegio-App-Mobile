@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.ui.admin.users.studentTab
+package com.jeyix.schooljeyix.ui.admin.users.student
 
 import android.os.Bundle
 import android.util.Log

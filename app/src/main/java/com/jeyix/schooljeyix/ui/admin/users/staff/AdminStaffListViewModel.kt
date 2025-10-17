@@ -1,9 +1,8 @@
-package com.jeyix.schooljeyix.ui.admin.users.studentTab
+package com.jeyix.schooljeyix.ui.admin.users.staff
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeyix.schooljeyix.domain.usecase.student.GetAllStudentsUseCase
+import com.jeyix.schooljeyix.domain.usecase.users.UserUseCases
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -13,27 +12,26 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class AdminStudentListViewModel @Inject constructor(
-    private val getAllStudentsUseCase: GetAllStudentsUseCase
+class AdminStaffListViewModel @Inject constructor(
+    private val userUseCases: UserUseCases
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(AdminStudentListUiState())
+    private val _uiState = MutableStateFlow(AdminStaffListUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-        loadStudents()
+        loadStaff()
     }
 
-    private fun loadStudents() {
+    private fun loadStaff() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val result = getAllStudentsUseCase()
-            Log.d("AdminUsersDebug", "Resultado del GetAllStudentsUseCase: $result")
-            when (result) {
+            // Suponiendo que tienes un endpoint y un UseCase para traer todo el personal
+            when (val result = userUseCases.getAllPersonalForAdmin()) {
                 is Resource.Success -> {
                     _uiState.update {
-                        it.copy(isLoading = false, students = result.data ?: emptyList())
+                        it.copy(isLoading = false, staff = result.data ?: emptyList())
                     }
                 }
                 is Resource.Error -> {

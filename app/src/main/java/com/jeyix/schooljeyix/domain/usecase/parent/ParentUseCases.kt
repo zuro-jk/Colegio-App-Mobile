@@ -1,6 +1,7 @@
 package com.jeyix.schooljeyix.domain.usecase.parent
 
 import com.jeyix.schooljeyix.data.remote.feature.parent.request.ParentRequest
+import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentDetailResponse
 import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentResponse
 import com.jeyix.schooljeyix.domain.util.Resource
 import jakarta.inject.Inject
@@ -18,6 +19,13 @@ class ParentUseCases @Inject constructor(
             return Resource.Error("El ID del padre no es válido.")
         }
         return repository.getParentById(id)
+    }
+
+    suspend fun getParentByIdDetails(id: Long): Resource<ParentDetailResponse> {
+        if (id <= 0) {
+            return Resource.Error("El ID del padre no es válido.")
+        }
+        return repository.getParentByIdDetails(id)
     }
 
     suspend fun addParent(request: ParentRequest): Resource<ParentResponse> {

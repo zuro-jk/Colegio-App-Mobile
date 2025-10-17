@@ -49,4 +49,6 @@
     <color name="overlay_dark_low">#1F000000</color>
     <color name="overlay_dark_medium">#3D000000</color>
     <color name="overlay_white_high">#B3FFFFFF</color>
+    <color name="surface_variant_alpha_30">#4DE7E0EC</color>
+    <color name="text_input_background">#F7F8FA</color>
 </resources>

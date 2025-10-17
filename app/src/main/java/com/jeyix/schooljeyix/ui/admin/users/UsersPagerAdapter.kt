@@ -2,9 +2,9 @@ package com.jeyix.schooljeyix.ui.admin.users
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.jeyix.schooljeyix.ui.admin.users.adminTab.AdminStaffListFragment
-import com.jeyix.schooljeyix.ui.admin.users.parentTab.AdminParentListFragment
-import com.jeyix.schooljeyix.ui.admin.users.studentTab.AdminStudentListFragment
+import com.jeyix.schooljeyix.ui.admin.users.staff.AdminStaffListFragment
+import com.jeyix.schooljeyix.ui.admin.users.parent.AdminParentListFragment
+import com.jeyix.schooljeyix.ui.admin.users.student.AdminStudentListFragment
 
 private const val NUM_TABS = 3
 

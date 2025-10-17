@@ -1,8 +1,8 @@
-package com.jeyix.schooljeyix.ui.admin.users.adminTab
+package com.jeyix.schooljeyix.ui.admin.users.parent
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeyix.schooljeyix.domain.usecase.users.UserUseCases
+import com.jeyix.schooljeyix.domain.usecase.parent.ParentUseCases
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -12,29 +12,30 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class AdminStaffListViewModel @Inject constructor(
-    private val userUseCases: UserUseCases
+class AdminParentListViewModel @Inject constructor(
+    private val parentUseCases: ParentUseCases
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(AdminStaffListUiState())
+    private val _uiState = MutableStateFlow(AdminParentListUiState())
     val uiState = _uiState.asStateFlow()
 
     init {
-        loadStaff()
+        loadParents()
     }
 
-    private fun loadStaff() {
+    private fun loadParents() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-
-            // Suponiendo que tienes un endpoint y un UseCase para traer todo el personal
-            when (val result = userUseCases.getAllPersonalForAdmin()) {
+            when (val result = parentUseCases.getAllParents()) {
                 is Resource.Success -> {
+                    val data = result.data ?: emptyList()
+                    println("DEBUG: Parents loaded -> ${data.size}")
                     _uiState.update {
-                        it.copy(isLoading = false, staff = result.data ?: emptyList())
+                        it.copy(isLoading = false, parents = data)
                     }
                 }
                 is Resource.Error -> {
+                    println("DEBUG: Error -> ${result.message}")
                     _uiState.update { it.copy(isLoading = false, error = result.message) }
                 }
                 is Resource.Loading -> {}

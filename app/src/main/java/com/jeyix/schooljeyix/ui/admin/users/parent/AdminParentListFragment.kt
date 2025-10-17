@@ -1,17 +1,17 @@
-package com.jeyix.schooljeyix.ui.admin.users.parentTab
+package com.jeyix.schooljeyix.ui.admin.users.parent
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.databinding.FragmentAdminParentListBinding
+import com.jeyix.schooljeyix.ui.admin.users.UsersFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,7 +36,10 @@ class AdminParentListFragment : Fragment(R.layout.fragment_admin_parent_list) {
     private fun setupRecyclerView() {
         parentAdapter = AdminParentListAdapter { parent, action ->
             when (action) {
-                "edit" -> Toast.makeText(context, "Editar: ${parent.user.fullName}", Toast.LENGTH_SHORT).show()
+                "edit" -> {
+                    val navAction = UsersFragmentDirections.actionUsersFragmentToEditParentFragment(parent.id)
+                    findNavController().navigate(navAction)
+                }
                 "delete" -> Toast.makeText(context, "Eliminar: ${parent.user.fullName}", Toast.LENGTH_SHORT).show()
             }
         }

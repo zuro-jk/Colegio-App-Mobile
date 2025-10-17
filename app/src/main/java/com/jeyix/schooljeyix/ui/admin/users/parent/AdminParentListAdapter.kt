@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.ui.admin.users.parentTab
+package com.jeyix.schooljeyix.ui.admin.users.parent
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -29,18 +29,28 @@ class AdminParentListAdapter(
 
         fun bind(parent: ParentResponse) {
             val context = itemView.context
-            val user = parent.user // Obtenemos el objeto 'user' anidado
+            val user = parent.user
 
-            binding.tvUserName.text = user.fullName
-            binding.tvUserEmail.text = user.email
+            if (user == null) {
+                binding.tvUserName.text = "Sin usuario"
+                binding.tvUserEmail.text = ""
+                binding.ivUserAvatar.setImageResource(R.drawable.ic_account_circle_24)
+                return
+            }
 
-//            val avatarUrl = if (!user.profileImageUrl.isNullOrBlank()) {
-//                user.profileImageUrl
-//            } else {
-//                "https://api.dicebear.com/8.x/adventurer/svg?seed=${user.username}"
-//            }
-            val avatarUrl = "https://api.dicebear.com/8.x/adventurer/svg?seed=${user.username}"
-            Glide.with(context).load(avatarUrl).placeholder(R.drawable.ic_account_circle_24).into(binding.ivUserAvatar)
+            binding.tvUserName.text = user.fullName ?: "Sin nombre"
+            binding.tvUserEmail.text = user.email ?: "Sin correo"
+
+            val avatarUrl = if (!user.profileImageUrl.isNullOrBlank()) {
+                user.profileImageUrl
+            } else {
+                "https://api.dicebear.com/8.x/adventurer/png?seed=${user.username}"
+            }
+            Glide.with(context)
+                .load(avatarUrl)
+                .placeholder(R.drawable.ic_account_circle_24)
+                .error(R.drawable.ic_account_circle_24)
+                .into(binding.ivUserAvatar)
 
             binding.chipUserRole.text = "PADRE"
             binding.chipUserRole.setChipBackgroundColorResource(R.color.primary)
@@ -64,6 +74,7 @@ class AdminParentListAdapter(
         override fun areItemsTheSame(oldItem: ParentResponse, newItem: ParentResponse): Boolean {
             return oldItem.id == newItem.id
         }
+
         override fun areContentsTheSame(oldItem: ParentResponse, newItem: ParentResponse): Boolean {
             return oldItem == newItem
         }

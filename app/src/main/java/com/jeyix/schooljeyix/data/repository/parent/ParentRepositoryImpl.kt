@@ -1,7 +1,9 @@
 package com.jeyix.schooljeyix.data.repository.parent
 
+import com.google.gson.JsonParseException
 import com.jeyix.schooljeyix.data.remote.feature.parent.api.ParentApi
 import com.jeyix.schooljeyix.data.remote.feature.parent.request.ParentRequest
+import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentDetailResponse
 import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentResponse
 import com.jeyix.schooljeyix.domain.usecase.parent.ParentRepository
 import com.jeyix.schooljeyix.domain.util.Resource
@@ -23,6 +25,8 @@ class ParentRepositoryImpl @Inject constructor(
                     response.errorBody()?.string() ?: "Error al obtener la lista de padres."
                 )
             }
+        } catch (e: JsonParseException) {
+            Resource.Error("Error de formato en la respuesta del servidor. Contacte a soporte.")
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Error de conexión.")
         }
@@ -36,6 +40,23 @@ class ParentRepositoryImpl @Inject constructor(
             } else {
                 Resource.Error(response.errorBody()?.string() ?: "Padre no encontrado.")
             }
+        } catch (e: JsonParseException) {
+            Resource.Error("Error de formato en la respuesta del servidor. Contacte a soporte.")
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Error de conexión.")
+        }
+    }
+
+    override suspend fun getParentByIdDetails(id: Long): Resource<ParentDetailResponse> {
+        return try {
+            val response = api.getParentByIdDetails(id)
+            if (response.isSuccessful && response.body()?.data != null) {
+                Resource.Success(response.body()!!.data!!)
+            } else {
+                Resource.Error(response.errorBody()?.string() ?: "Padre no encontrado.")
+            }
+        } catch (e: JsonParseException) {
+            Resource.Error("Error de formato en la respuesta del servidor. Contacte a soporte.")
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Error de conexión.")
         }
@@ -49,6 +70,8 @@ class ParentRepositoryImpl @Inject constructor(
             } else {
                 Resource.Error(response.errorBody()?.string() ?: "Error al añadir el padre.")
             }
+        } catch (e: JsonParseException) {
+            Resource.Error("Error de formato en la respuesta del servidor. Contacte a soporte.")
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Error de conexión.")
         }
@@ -65,6 +88,8 @@ class ParentRepositoryImpl @Inject constructor(
             } else {
                 Resource.Error(response.errorBody()?.string() ?: "Error al actualizar el padre.")
             }
+        } catch (e: JsonParseException) {
+            Resource.Error("Error de formato en la respuesta del servidor. Contacte a soporte.")
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Error de conexión.")
         }
@@ -78,6 +103,8 @@ class ParentRepositoryImpl @Inject constructor(
             } else {
                 Resource.Error(response.errorBody()?.string() ?: "Error al eliminar el padre.")
             }
+        } catch (e: JsonParseException) {
+            Resource.Error("Error de formato en la respuesta del servidor. Contacte a soporte.")
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Error de conexión.")
         }

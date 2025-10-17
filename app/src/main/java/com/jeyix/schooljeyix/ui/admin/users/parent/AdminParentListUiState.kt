@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.ui.admin.users.parentTab
+package com.jeyix.schooljeyix.ui.admin.users.parent
 
 import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentResponse
 
