@@ -7,12 +7,16 @@ import com.jeyix.schooljeyix.data.remote.feature.student.api.StudentApi
 import com.jeyix.schooljeyix.data.remote.feature.users.api.UserApi
 import com.jeyix.schooljeyix.data.repository.auth.AuthRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.enrollment.EnrollmentRepositoryImpl
+import com.jeyix.schooljeyix.data.repository.grade.GradeRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.parent.ParentRepositoryImpl
+import com.jeyix.schooljeyix.data.repository.section.SectionRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.student.StudentRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.users.UserRepositoryImpl
 import com.jeyix.schooljeyix.domain.usecase.auth.AuthRepository
 import com.jeyix.schooljeyix.domain.usecase.enrollment.EnrollmentRepository
+import com.jeyix.schooljeyix.domain.usecase.grade.GradeRepository
 import com.jeyix.schooljeyix.domain.usecase.parent.ParentRepository
+import com.jeyix.schooljeyix.domain.usecase.section.SectionRepository
 import com.jeyix.schooljeyix.domain.usecase.student.StudentRepository
 import com.jeyix.schooljeyix.domain.usecase.users.UserRepository
 import dagger.Binds
@@ -55,4 +59,16 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         userRepositoryImpl: UserRepositoryImpl
     ): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindGradeRepository(
+        gradeRepositoryImpl: GradeRepositoryImpl
+    ): GradeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSectionRepository(
+        sectionRepositoryImpl: SectionRepositoryImpl
+    ): SectionRepository
 }

@@ -1,8 +1,11 @@
 package com.jeyix.schooljeyix.domain.usecase.parent
 
-import com.jeyix.schooljeyix.data.remote.feature.parent.request.ParentRequest
-import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentDetailResponse
+import android.net.Uri
+import com.jeyix.schooljeyix.data.remote.feature.parent.request.CreateParentRequest
+import com.jeyix.schooljeyix.data.remote.feature.parent.request.UpdateParentRequest
+import com.jeyix.schooljeyix.data.remote.feature.parent.response.detail.ParentDetailResponse
 import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentResponse
+import com.jeyix.schooljeyix.data.remote.feature.student.response.StudentResponse
 import com.jeyix.schooljeyix.domain.util.Resource
 
 interface ParentRepository {
@@ -17,17 +20,27 @@ interface ParentRepository {
         id: Long
     ): Resource<ParentDetailResponse>
 
-    suspend fun addParent(
-        parentRequest: ParentRequest
+    // --- MÉTODOS CORREGIDOS ---
+    // Renombrado y usa el DTO correcto
+    suspend fun createParent(
+        request: CreateParentRequest
     ): Resource<ParentResponse>
 
-    suspend fun updateParentById(
+    suspend fun updateParentProfileImage(
+        parentId: Long,
+        imageUri: Uri
+    ): Resource<ParentResponse>
+
+    // Renombrado y usa el DTO correcto
+    suspend fun updateParent(
         id: Long,
-        parentRequest: ParentRequest
+        request: UpdateParentRequest
     ): Resource<ParentResponse>
 
-    suspend fun deleteParentById(
+    // Renombrado por consistencia
+    suspend fun deleteParent(
         id: Long
     ): Resource<Unit>
+
 
 }

@@ -38,14 +38,14 @@ class GetDashboardDataUseCase @Inject constructor(
                 val enrollments = (enrollmentsResult as Resource.Success).data!!
 
                 val processedStudents = studentsFromApi.map { student ->
-                    val avatarUrl = if (!student.profileImageUrl.isNullOrBlank()) {
-                        student.profileImageUrl
+                    val avatarUrl = if (!student.user.profileImageUrl.isNullOrBlank()) {
+                        student.user.profileImageUrl
                     } else {
-                        "https://api.dicebear.com/8.x/adventurer/svg?seed=${student.username}"
+                        "https://api.dicebear.com/8.x/adventurer/svg?seed=${student.user.username}"
                     }
                     ApiStudentSummary(
                         id = student.id,
-                        fullName = student.fullName,
+                        fullName = student.user.fullName,
                         gradeLevel = student.gradeLevel,
                         profileImageUrl = avatarUrl
                     )

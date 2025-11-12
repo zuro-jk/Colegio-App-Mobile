@@ -29,13 +29,13 @@ class StudentGridAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(student: StudentResponse) {
-            binding.tvStudentName.text = student.fullName
+            binding.tvStudentName.text = student.user.fullName
             binding.tvStudentGrade.text = student.gradeLevel
 
 //            val avatarUrl = if (!student.profileImageUrl.isNullOrBlank()) {
 //                student.profileImageUrl
 //            } else {
-            val avatarUrl = "https://api.dicebear.com/8.x/adventurer/svg?seed=${student.username}"
+            val avatarUrl = "https://api.dicebear.com/8.x/adventurer/svg?seed=${student.user.username}"
 //            }
 
             Glide.with(itemView.context)

@@ -33,12 +33,18 @@ class AdminParentListFragment : Fragment(R.layout.fragment_admin_parent_list) {
         observeUiState()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadParents()
+    }
+
     private fun setupRecyclerView() {
         parentAdapter = AdminParentListAdapter { parent, action ->
             when (action) {
                 "edit" -> {
                     val navAction = UsersFragmentDirections.actionUsersFragmentToEditParentFragment(parent.id)
-                    findNavController().navigate(navAction)
+
+                    parentFragment?.parentFragment?.findNavController()?.navigate(navAction)
                 }
                 "delete" -> Toast.makeText(context, "Eliminar: ${parent.user.fullName}", Toast.LENGTH_SHORT).show()
             }

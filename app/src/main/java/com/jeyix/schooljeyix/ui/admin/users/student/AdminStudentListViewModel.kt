@@ -24,7 +24,7 @@ class AdminStudentListViewModel @Inject constructor(
         loadStudents()
     }
 
-    private fun loadStudents() {
+    fun loadStudents() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 

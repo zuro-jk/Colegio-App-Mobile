@@ -43,7 +43,7 @@ class StudentsFragment : Fragment() {
 
     private fun setupRecyclerView() {
         studentAdapter = StudentGridAdapter { student ->
-            Toast.makeText(context, "Viendo perfil de ${student.fullName}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Viendo perfil de ${student.user.fullName}", Toast.LENGTH_SHORT).show()
         }
 
         binding.rvStudents.apply {

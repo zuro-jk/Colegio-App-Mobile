@@ -31,13 +31,13 @@ class AdminStudentListAdapter(
             val context = itemView.context
 
             // Usamos los campos de StudentResponse
-            binding.tvUserName.text = student.fullName
-            binding.tvUserEmail.text = student.username
+            binding.tvUserName.text = student.user.fullName
+            binding.tvUserEmail.text = student.user.username
 
-            val avatarUrl = if (!student.profileImageUrl.isNullOrBlank()) {
-                student.profileImageUrl
+            val avatarUrl = if (!student.user.profileImageUrl.isNullOrBlank()) {
+                student.user.profileImageUrl
             } else {
-                "https://api.dicebear.com/8.x/adventurer/svg?seed=${student.username}"
+                "https://api.dicebear.com/8.x/adventurer/svg?seed=${student.user.username}"
             }
             Glide.with(context)
                 .load(avatarUrl)

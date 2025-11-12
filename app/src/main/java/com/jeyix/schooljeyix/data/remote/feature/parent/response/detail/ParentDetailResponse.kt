@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.data.remote.feature.parent.response
+package com.jeyix.schooljeyix.data.remote.feature.parent.response.detail
 
 data class ParentDetailResponse (
     val id: Long,

@@ -23,7 +23,7 @@ class AdminParentListViewModel @Inject constructor(
         loadParents()
     }
 
-    private fun loadParents() {
+    fun loadParents() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             when (val result = parentUseCases.getAllParents()) {
