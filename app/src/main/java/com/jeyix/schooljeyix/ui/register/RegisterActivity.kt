@@ -2,26 +2,17 @@ package com.jeyix.schooljeyix.ui.register
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.util.Patterns
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.data.remote.feature.auth.request.RegisterRequest
 import com.jeyix.schooljeyix.databinding.ActivityRegisterBinding
-import com.jeyix.schooljeyix.domain.model.User
-import com.jeyix.schooljeyix.domain.usecase.auth.AuthRepository
 import com.jeyix.schooljeyix.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
-import jakarta.inject.Inject
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

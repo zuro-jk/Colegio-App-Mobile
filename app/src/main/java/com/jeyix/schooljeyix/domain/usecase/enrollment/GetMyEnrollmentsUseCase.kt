@@ -1,8 +1,9 @@
 package com.jeyix.schooljeyix.domain.usecase.enrollment
 
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.EnrollmentResponse
+import com.jeyix.schooljeyix.domain.repository.EnrollmentRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class GetMyEnrollmentsUseCase @Inject constructor(
     private val repository: EnrollmentRepository

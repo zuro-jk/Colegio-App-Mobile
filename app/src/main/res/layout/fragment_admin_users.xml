@@ -32,7 +32,9 @@
         app:layout_constraintEnd_toStartOf="@id/btnAddUser"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:startIconDrawable="@drawable/ic_search_24">
+        app:startIconDrawable="@drawable/ic_search_24"
+        app:endIconMode="clear_text"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSearch"

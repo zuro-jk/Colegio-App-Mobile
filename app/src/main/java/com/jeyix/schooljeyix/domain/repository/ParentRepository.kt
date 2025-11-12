@@ -1,11 +1,10 @@
-package com.jeyix.schooljeyix.domain.usecase.parent
+package com.jeyix.schooljeyix.domain.repository
 
 import android.net.Uri
 import com.jeyix.schooljeyix.data.remote.feature.parent.request.CreateParentRequest
 import com.jeyix.schooljeyix.data.remote.feature.parent.request.UpdateParentRequest
-import com.jeyix.schooljeyix.data.remote.feature.parent.response.detail.ParentDetailResponse
 import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentResponse
-import com.jeyix.schooljeyix.data.remote.feature.student.response.StudentResponse
+import com.jeyix.schooljeyix.data.remote.feature.parent.response.detail.ParentDetailResponse
 import com.jeyix.schooljeyix.domain.util.Resource
 
 interface ParentRepository {

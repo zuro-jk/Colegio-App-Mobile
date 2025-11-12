@@ -2,8 +2,9 @@ package com.jeyix.schooljeyix.domain.usecase.notifications
 
 import com.jeyix.schooljeyix.data.remote.feature.notifications.request.AnnouncementRequest
 import com.jeyix.schooljeyix.data.remote.feature.notifications.request.ContactNotificationEvent
+import com.jeyix.schooljeyix.domain.repository.NotificationRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class NotificationUseCases @Inject constructor(
     private val repository: NotificationRepository

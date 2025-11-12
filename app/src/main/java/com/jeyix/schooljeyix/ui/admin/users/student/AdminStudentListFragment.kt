@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.databinding.FragmentAdminStudentListBinding
+import com.jeyix.schooljeyix.ui.admin.users.SearchableFragment
 import com.jeyix.schooljeyix.ui.admin.users.UsersFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class AdminStudentListFragment : Fragment(R.layout.fragment_admin_student_list) {
+class AdminStudentListFragment : Fragment(R.layout.fragment_admin_student_list), SearchableFragment {
 
     private var _binding: FragmentAdminStudentListBinding? = null
     private val binding get() = _binding!!
@@ -68,6 +69,10 @@ class AdminStudentListFragment : Fragment(R.layout.fragment_admin_student_list) 
                 state.error?.let { Toast.makeText(context, it, Toast.LENGTH_LONG).show() }
             }
         }
+    }
+
+    override fun onSearchQuery(query: String) {
+        viewModel.search(query)
     }
 
     override fun onDestroyView() {

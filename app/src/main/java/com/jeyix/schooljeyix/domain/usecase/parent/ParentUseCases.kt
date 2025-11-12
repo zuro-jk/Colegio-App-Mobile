@@ -1,6 +1,7 @@
 package com.jeyix.schooljeyix.domain.usecase.parent
 
-import jakarta.inject.Inject
+import javax.inject.Inject
+
 
 data class ParentUseCases @Inject constructor(
     val getAllParents: GetAllParentsUseCase,

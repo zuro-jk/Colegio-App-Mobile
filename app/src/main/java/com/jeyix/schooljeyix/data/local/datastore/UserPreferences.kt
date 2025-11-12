@@ -7,9 +7,9 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.gson.Gson
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.UserProfileResponse
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 class UserPreferences @Inject constructor(
     private val dataStore: DataStore<Preferences>

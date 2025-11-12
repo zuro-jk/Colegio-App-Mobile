@@ -1,11 +1,11 @@
 package com.jeyix.schooljeyix.data.remote.core
 
 import com.jeyix.schooljeyix.data.local.datastore.UserPreferences
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
     private val userPreferences: UserPreferences

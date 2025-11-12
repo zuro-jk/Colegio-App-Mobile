@@ -3,10 +3,10 @@ package com.jeyix.schooljeyix.data.repository.section
 import com.jeyix.schooljeyix.data.remote.feature.section.api.SectionApi
 import com.jeyix.schooljeyix.data.remote.feature.section.request.SectionRequest
 import com.jeyix.schooljeyix.data.remote.feature.section.response.SectionResponse
-import com.jeyix.schooljeyix.domain.usecase.section.SectionRepository
+import com.jeyix.schooljeyix.domain.repository.SectionRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class SectionRepositoryImpl @Inject constructor(

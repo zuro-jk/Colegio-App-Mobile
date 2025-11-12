@@ -7,13 +7,13 @@ import com.jeyix.schooljeyix.data.local.datastore.UserPreferences
 import com.jeyix.schooljeyix.domain.usecase.dashboard.GetDashboardDataUseCase
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(

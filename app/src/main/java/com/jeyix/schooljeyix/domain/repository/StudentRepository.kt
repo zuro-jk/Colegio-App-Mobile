@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.domain.usecase.student
+package com.jeyix.schooljeyix.domain.repository
 
 import android.net.Uri
 import com.jeyix.schooljeyix.data.remote.feature.student.request.CreateStudentRequest

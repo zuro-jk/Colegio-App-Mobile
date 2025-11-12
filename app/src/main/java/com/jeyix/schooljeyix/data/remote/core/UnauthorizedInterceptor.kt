@@ -5,16 +5,13 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import com.jeyix.schooljeyix.data.local.datastore.UserPreferences
-import com.jeyix.schooljeyix.domain.usecase.auth.LogoutUseCase
 import com.jeyix.schooljeyix.ui.login.LoginActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class UnauthorizedInterceptor @Inject constructor(

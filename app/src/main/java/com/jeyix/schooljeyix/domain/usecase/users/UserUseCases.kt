@@ -3,12 +3,15 @@ package com.jeyix.schooljeyix.domain.usecase.users
 import android.net.Uri
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.UserProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.request.ChangePasswordRequest
+import com.jeyix.schooljeyix.data.remote.feature.users.request.CreateAdminRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.request.DeviceTokenRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.request.UpdateProfileRequest
+import com.jeyix.schooljeyix.data.remote.feature.users.request.UpdateUserRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UpdateProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UserSessionResponse
+import com.jeyix.schooljeyix.domain.repository.UserRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class UserUseCases @Inject constructor(
     private val repository: UserRepository
@@ -77,5 +80,29 @@ class UserUseCases @Inject constructor(
 
     suspend fun updateProfileImage(imageUri: Uri): Resource<UserProfileResponse> {
         return repository.updateProfileImage(imageUri)
+    }
+
+    suspend fun createAdminUser(request: CreateAdminRequest): Resource<UserProfileResponse> {
+        if (request.roles.isEmpty()) {
+            return Resource.Error("Se debe seleccionar al menos un rol.")
+        }
+        return repository.createAdminUser(request)
+    }
+
+    suspend fun updateUserById(userId: Long, request: UpdateUserRequest): Resource<UserProfileResponse> {
+        if (userId <= 0) {
+            return Resource.Error("El ID de usuario no es válido.")
+        }
+        if (request.firstName.isBlank() || request.lastName.isBlank()) {
+            return Resource.Error("El nombre y el apellido no pueden estar vacíos.")
+        }
+        return repository.updateUserById(userId, request)
+    }
+
+    suspend fun updateUserImageById(userId: Long, imageUri: Uri): Resource<UserProfileResponse> {
+        if (userId <= 0) {
+            return Resource.Error("El ID de usuario no es válido.")
+        }
+        return repository.updateUserImageById(userId, imageUri)
     }
 }

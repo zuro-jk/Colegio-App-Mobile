@@ -7,15 +7,18 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.databinding.FragmentAdminStaffListBinding
+import com.jeyix.schooljeyix.ui.admin.users.SearchableFragment
+import com.jeyix.schooljeyix.ui.admin.users.UsersFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AdminStaffListFragment : Fragment(R.layout.fragment_admin_staff_list) {
+class AdminStaffListFragment : Fragment(R.layout.fragment_admin_staff_list), SearchableFragment {
 
     private var _binding: FragmentAdminStaffListBinding? = null
     private val binding get() = _binding!!
@@ -31,11 +34,29 @@ class AdminStaffListFragment : Fragment(R.layout.fragment_admin_staff_list) {
         observeUiState()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadStaff()
+    }
+
+    override fun onSearchQuery(query: String) {
+        viewModel.search(query)
+    }
+
     private fun setupRecyclerView() {
-        // Inicializamos el adapter genérico
         userAdapter = AdminUserAdapter { user, action ->
             when (action) {
-                "edit" -> Toast.makeText(context, "Editar: ${user.fullName}", Toast.LENGTH_SHORT).show()
+                "edit" -> {
+
+                    val userId = user.id
+
+                    if (userId != null) {
+                        val navAction = UsersFragmentDirections.actionNavAdminUsersToAdminStaffFormFragment(userId)
+                        parentFragment?.parentFragment?.findNavController()?.navigate(navAction)
+                    } else {
+                        Toast.makeText(context, "Error: El usuario no tiene ID", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 "delete" -> Toast.makeText(context, "Eliminar: ${user.fullName}", Toast.LENGTH_SHORT).show()
             }
         }

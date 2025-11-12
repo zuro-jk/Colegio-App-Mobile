@@ -2,9 +2,9 @@ package com.jeyix.schooljeyix.domain.usecase.auth
 
 import android.util.Patterns
 import com.jeyix.schooljeyix.data.remote.feature.auth.request.RegisterRequest
-import com.jeyix.schooljeyix.domain.model.User
+import com.jeyix.schooljeyix.domain.repository.AuthRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class RegisterUseCase @Inject constructor(
     private val repository: AuthRepository

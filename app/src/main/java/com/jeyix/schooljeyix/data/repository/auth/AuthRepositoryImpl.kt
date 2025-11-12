@@ -6,10 +6,10 @@ import com.jeyix.schooljeyix.data.remote.feature.auth.request.RefreshRequest
 import com.jeyix.schooljeyix.data.remote.feature.auth.request.RegisterRequest
 import com.jeyix.schooljeyix.data.remote.feature.auth.request.SessionLogoutRequest
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.AuthResponse
-import com.jeyix.schooljeyix.domain.usecase.auth.AuthRepository
+import com.jeyix.schooljeyix.domain.repository.AuthRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(

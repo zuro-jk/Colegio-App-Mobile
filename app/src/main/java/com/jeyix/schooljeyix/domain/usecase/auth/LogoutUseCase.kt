@@ -3,8 +3,9 @@ package com.jeyix.schooljeyix.domain.usecase.auth
 import android.util.Log
 import com.jeyix.schooljeyix.data.local.datastore.UserPreferences
 import com.jeyix.schooljeyix.data.remote.feature.auth.request.SessionLogoutRequest
-import jakarta.inject.Inject
+import com.jeyix.schooljeyix.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.firstOrNull
+import javax.inject.Inject
 
 class LogoutUseCase @Inject constructor(
     private val repository: AuthRepository,

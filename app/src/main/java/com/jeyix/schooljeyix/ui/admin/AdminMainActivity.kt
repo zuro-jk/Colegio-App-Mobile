@@ -12,8 +12,8 @@ import com.jeyix.schooljeyix.databinding.ActivityAdminMainBinding
 import com.jeyix.schooljeyix.domain.usecase.auth.LogoutUseCase
 import com.jeyix.schooljeyix.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
-import jakarta.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AdminMainActivity : AppCompatActivity() {

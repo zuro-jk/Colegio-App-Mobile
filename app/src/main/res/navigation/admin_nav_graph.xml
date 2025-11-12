@@ -24,6 +24,10 @@
         <action
             android:id="@+id/action_nav_admin_users_to_adminStudentFormFragment"
             app:destination="@id/adminStudentFormFragment" />
+
+        <action
+            android:id="@+id/action_nav_admin_users_to_adminStaffFormFragment"
+            app:destination="@id/adminStaffFormFragment" />
     </fragment>
 
     <fragment
@@ -34,7 +38,8 @@
 
         <argument
             android:name="parentId"
-            app:argType="long" />
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
 
     <fragment
@@ -48,6 +53,18 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/adminStaffFormFragment"
+        android:name="com.jeyix.schooljeyix.ui.admin.users.staff.form.AdminStaffFormFragment"
+        android:label="Gestionar Personal"
+        tools:layout="@layout/fragment_admin_staff_form">
+
+        <argument
+            android:name="userId"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
 
     <fragment

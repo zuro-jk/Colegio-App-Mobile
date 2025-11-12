@@ -1,8 +1,9 @@
 package com.jeyix.schooljeyix.domain.usecase.grade
 
 import com.jeyix.schooljeyix.data.remote.feature.grade.response.GradeResponse
+import com.jeyix.schooljeyix.domain.repository.GradeRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class GetAllGradesUseCase @Inject constructor(
     private val repository: GradeRepository

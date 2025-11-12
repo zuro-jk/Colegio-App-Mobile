@@ -2,8 +2,9 @@ package com.jeyix.schooljeyix.domain.usecase.auth
 
 import com.jeyix.schooljeyix.data.remote.feature.auth.request.LoginRequest
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.AuthResponse
+import com.jeyix.schooljeyix.domain.repository.AuthRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
     private val repository: AuthRepository

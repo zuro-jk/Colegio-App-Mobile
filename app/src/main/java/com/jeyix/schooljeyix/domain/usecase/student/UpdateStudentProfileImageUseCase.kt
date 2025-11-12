@@ -2,8 +2,9 @@ package com.jeyix.schooljeyix.domain.usecase.student
 
 import android.net.Uri
 import com.jeyix.schooljeyix.data.remote.feature.student.response.StudentResponse
+import com.jeyix.schooljeyix.domain.repository.StudentRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class UpdateStudentProfileImageUseCase @Inject constructor(
     private val repository: StudentRepository

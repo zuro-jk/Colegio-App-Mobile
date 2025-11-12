@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.domain.usecase.enrollment
+package com.jeyix.schooljeyix.domain.repository
 
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.request.EnrollmentRequest
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.EnrollmentResponse

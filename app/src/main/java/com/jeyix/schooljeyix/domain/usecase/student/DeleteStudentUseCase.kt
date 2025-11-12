@@ -1,7 +1,8 @@
 package com.jeyix.schooljeyix.domain.usecase.student
 
+import com.jeyix.schooljeyix.domain.repository.StudentRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class DeleteStudentUseCase @Inject constructor(
     private val repository: StudentRepository

@@ -7,12 +7,11 @@ import com.jeyix.schooljeyix.data.remote.feature.parent.request.CreateParentRequ
 import com.jeyix.schooljeyix.data.remote.feature.parent.request.UpdateParentRequest
 import com.jeyix.schooljeyix.data.remote.feature.parent.response.detail.ParentDetailResponse
 import com.jeyix.schooljeyix.data.remote.feature.parent.response.ParentResponse
-import com.jeyix.schooljeyix.data.remote.feature.student.response.StudentResponse
 import com.jeyix.schooljeyix.data.util.FileUtil
-import com.jeyix.schooljeyix.domain.usecase.parent.ParentRepository
+import com.jeyix.schooljeyix.domain.repository.ParentRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class ParentRepositoryImpl @Inject constructor(

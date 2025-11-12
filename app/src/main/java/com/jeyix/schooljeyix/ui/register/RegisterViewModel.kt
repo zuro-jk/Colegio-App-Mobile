@@ -6,10 +6,10 @@ import com.jeyix.schooljeyix.data.remote.feature.auth.request.RegisterRequest
 import com.jeyix.schooljeyix.domain.usecase.auth.RegisterUseCase
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(

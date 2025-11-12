@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.domain.usecase.grade
+package com.jeyix.schooljeyix.domain.repository
 
 import com.jeyix.schooljeyix.data.remote.feature.grade.request.GradeRequest
 import com.jeyix.schooljeyix.data.remote.feature.grade.response.GradeDetailResponse

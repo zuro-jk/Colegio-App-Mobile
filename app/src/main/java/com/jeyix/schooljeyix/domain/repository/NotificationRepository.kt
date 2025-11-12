@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.domain.usecase.notifications
+package com.jeyix.schooljeyix.domain.repository
 
 import com.jeyix.schooljeyix.data.remote.feature.notifications.request.AnnouncementRequest
 import com.jeyix.schooljeyix.data.remote.feature.notifications.request.ContactNotificationEvent

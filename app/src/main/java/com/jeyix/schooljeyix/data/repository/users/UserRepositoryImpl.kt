@@ -5,22 +5,26 @@ import android.net.Uri
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.UserProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.api.UserApi
 import com.jeyix.schooljeyix.data.remote.feature.users.request.ChangePasswordRequest
+import com.jeyix.schooljeyix.data.remote.feature.users.request.CreateAdminRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.request.DeviceTokenRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.request.UpdateProfileRequest
+import com.jeyix.schooljeyix.data.remote.feature.users.request.UpdateUserRequest
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UpdateProfileResponse
 import com.jeyix.schooljeyix.data.remote.feature.users.response.UserSessionResponse
-import com.jeyix.schooljeyix.domain.usecase.users.UserRepository
+import com.jeyix.schooljeyix.data.util.FileUtil
+import com.jeyix.schooljeyix.domain.repository.UserRepository
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.qualifiers.ApplicationContext
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class UserRepositoryImpl @Inject constructor(
     private val api: UserApi,
+    private val fileUtil: FileUtil,
     @ApplicationContext private val context: Context
 ): UserRepository {
 
@@ -130,6 +134,49 @@ class UserRepositoryImpl @Inject constructor(
             val bodyPart = MultipartBody.Part.createFormData("file", "profile_image.jpg", requestFile)
 
             val response = api.updateProfileImage(bodyPart)
+
+            if (response.isSuccessful && response.body()?.data != null) {
+                Resource.Success(response.body()!!.data!!)
+            } else {
+                Resource.Error(response.errorBody()?.string() ?: "Error al subir la imagen.")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Error de conexión al subir la imagen.")
+        }
+    }
+
+    override suspend fun createAdminUser(request: CreateAdminRequest): Resource<UserProfileResponse> {
+        return try {
+            val response = api.createAdminUser(request)
+            if (response.isSuccessful && response.body()?.data != null) {
+                Resource.Success(response.body()!!.data!!)
+            } else {
+                Resource.Error(response.errorBody()?.string() ?: "Error al crear el usuario.")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Error de conexión.")
+        }
+    }
+
+    override suspend fun updateUserById(userId: Long, request: UpdateUserRequest): Resource<UserProfileResponse> {
+        return try {
+            val response = api.updateUserById(userId, request)
+            if (response.isSuccessful && response.body()?.data != null) {
+                Resource.Success(response.body()!!.data!!)
+            } else {
+                Resource.Error(response.errorBody()?.string() ?: "Error al actualizar el usuario.")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Error de conexión.")
+        }
+    }
+
+    override suspend fun updateUserImageById(userId: Long, imageUri: Uri): Resource<UserProfileResponse> {
+        return try {
+            val bodyPart = fileUtil.createMultipartBody(imageUri, "file")
+                ?: return Resource.Error("No se pudo leer el archivo de imagen.")
+
+            val response = api.updateUserImageById(userId, bodyPart)
 
             if (response.isSuccessful && response.body()?.data != null) {
                 Resource.Success(response.body()!!.data!!)

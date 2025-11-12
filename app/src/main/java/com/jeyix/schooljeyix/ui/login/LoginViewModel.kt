@@ -7,10 +7,10 @@ import com.jeyix.schooljeyix.data.remote.feature.auth.request.LoginRequest
 import com.jeyix.schooljeyix.domain.usecase.auth.LoginUseCase
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(

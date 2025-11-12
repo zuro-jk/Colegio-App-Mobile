@@ -1,7 +1,8 @@
 package com.jeyix.schooljeyix.domain.usecase.parent
 
+import com.jeyix.schooljeyix.domain.repository.ParentRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class DeleteParentUseCase @Inject constructor(
     private val repository: ParentRepository

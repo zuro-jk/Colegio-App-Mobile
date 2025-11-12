@@ -3,10 +3,10 @@ package com.jeyix.schooljeyix.data.repository.enrollment
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.api.EnrollmentApi
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.request.EnrollmentRequest
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.EnrollmentResponse
-import com.jeyix.schooljeyix.domain.usecase.enrollment.EnrollmentRepository
+import com.jeyix.schooljeyix.domain.repository.EnrollmentRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class EnrollmentRepositoryImpl @Inject constructor(

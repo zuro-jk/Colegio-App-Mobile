@@ -9,11 +9,11 @@ import com.jeyix.schooljeyix.data.remote.feature.parent.request.UpdateParentRequ
 import com.jeyix.schooljeyix.domain.usecase.parent.ParentUseCases
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class AdminEditParentViewModel @Inject constructor(
@@ -24,10 +24,17 @@ class AdminEditParentViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AdminEditParentUiState())
     val uiState = _uiState.asStateFlow()
 
+    // Obtiene el ID. Si es 0L (valor por defecto), es "Modo Crear".
     private val parentId: Long = savedStateHandle.get<Long>("parentId")!!
 
     init {
-        loadParentData()
+        if (parentId == 0L) {
+            // Modo Crear: No cargamos nada, solo quitamos el 'loading'
+            _uiState.update { it.copy(isLoading = false) }
+        } else {
+            // Modo Editar: Cargamos los datos
+            loadParentData()
+        }
     }
 
     private fun loadParentData() {
@@ -41,34 +48,47 @@ class AdminEditParentViewModel @Inject constructor(
         }
     }
 
-    fun saveChanges(updatedRequest: UpdateParentRequest) {
+    /**
+     * Llama al UseCase para crear un nuevo padre.
+     */
+    fun createParent(request: CreateParentRequest) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            when (parentUseCases.updateParent(parentId, updatedRequest)) {
-                // Actualiza el 'parent' local con los nuevos datos
-                is Resource.Success -> _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        isUpdateSuccessful = true,
-                        // Opcional: actualizar 'parent' con la respuesta de 'updateParent'
-                        // parent = result.data
-                    )
-                }
+            when (parentUseCases.addParent(request)) { // Asumiendo que tu UseCase se llama 'createParent'
+                is Resource.Success -> _uiState.update { it.copy(isLoading = false, isUpdateSuccessful = true) }
+                is Resource.Error -> _uiState.update { it.copy(isLoading = false, error = "Error al crear") }
+                else -> {}
+            }
+        }
+    }
+
+    /**
+     * Llama al UseCase para actualizar un padre existente.
+     */
+    fun updateParent(request: UpdateParentRequest) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            when (parentUseCases.updateParent(parentId, request)) {
+                is Resource.Success -> _uiState.update { it.copy(isLoading = false, isUpdateSuccessful = true) }
                 is Resource.Error -> _uiState.update { it.copy(isLoading = false, error = "Error al guardar") }
                 else -> {}
             }
         }
     }
 
+    /**
+     * Sube la imagen de perfil para el padre actual (solo en modo edición).
+     */
     fun updateProfileImage(imageUri: Uri) {
+        if (parentId == 0L) {
+            _uiState.update { it.copy(error = "Guarda el padre primero") }
+            return
+        }
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-
             when (val result = parentUseCases.updateParentProfileImage(parentId, imageUri)) {
                 is Resource.Success -> {
-
                     val currentUserDetails = _uiState.value.parent?.user
-
                     val newUserSummary = result.data?.user
                     _uiState.update {
                         it.copy(
@@ -91,10 +111,16 @@ class AdminEditParentViewModel @Inject constructor(
         }
     }
 
+    /**
+     * El Fragment llama a esto después de 'populateForm' para evitar que se repita.
+     */
     fun onFormPopulated() {
         _uiState.update { it.copy(isFormPopulated = true) }
     }
 
+    /**
+     * El Fragment llama a esto después de mostrar un Toast de error.
+     */
     fun errorShown() {
         _uiState.update { it.copy(error = null) }
     }

@@ -4,10 +4,10 @@ import com.jeyix.schooljeyix.data.remote.feature.grade.api.GradeApi
 import com.jeyix.schooljeyix.data.remote.feature.grade.request.GradeRequest
 import com.jeyix.schooljeyix.data.remote.feature.grade.response.GradeDetailResponse
 import com.jeyix.schooljeyix.data.remote.feature.grade.response.GradeResponse
-import com.jeyix.schooljeyix.domain.usecase.grade.GradeRepository
+import com.jeyix.schooljeyix.domain.repository.GradeRepository
 import com.jeyix.schooljeyix.domain.util.Resource
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class GradeRepositoryImpl @Inject constructor(

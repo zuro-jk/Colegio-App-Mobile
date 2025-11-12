@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.domain.usecase.section
+package com.jeyix.schooljeyix.domain.repository
 
 import com.jeyix.schooljeyix.data.remote.feature.section.request.SectionRequest
 import com.jeyix.schooljeyix.data.remote.feature.section.response.SectionResponse

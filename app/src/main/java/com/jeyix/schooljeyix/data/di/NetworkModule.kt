@@ -11,17 +11,16 @@ import com.jeyix.schooljeyix.data.remote.feature.parent.api.ParentApi
 import com.jeyix.schooljeyix.data.remote.feature.section.api.SectionApi
 import com.jeyix.schooljeyix.data.remote.feature.student.api.StudentApi
 import com.jeyix.schooljeyix.data.remote.feature.users.api.UserApi
-import com.jeyix.schooljeyix.domain.usecase.auth.LogoutUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

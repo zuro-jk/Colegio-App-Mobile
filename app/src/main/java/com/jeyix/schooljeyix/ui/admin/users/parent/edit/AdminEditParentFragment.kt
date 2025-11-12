@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jeyix.schooljeyix.data.remote.feature.parent.request.CreateParentRequest
 import com.jeyix.schooljeyix.data.remote.feature.parent.request.UpdateParentRequest
 import com.jeyix.schooljeyix.data.remote.feature.parent.response.detail.ParentDetailResponse
 import kotlinx.coroutines.flow.collectLatest
@@ -30,7 +32,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AdminEditParentFragment : Fragment(R.layout.fragment_admin_edit_parent) {
-
     private var _binding: FragmentAdminEditParentBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AdminEditParentViewModel by viewModels()
@@ -38,6 +39,11 @@ class AdminEditParentFragment : Fragment(R.layout.fragment_admin_edit_parent) {
 
     private var tempImageUri: Uri? = null
 
+    // --- Variables de Modo ---
+    private var isEditMode = false
+    private var parentId: Long = 0L
+
+    // --- Lanzadores de Permisos y Actividades ---
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val allGranted = permissions.entries.all { it.value }
@@ -65,13 +71,46 @@ class AdminEditParentFragment : Fragment(R.layout.fragment_admin_edit_parent) {
                 }
             }
         }
+    // --- Fin de Lanzadores ---
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAdminEditParentBinding.bind(view)
 
+        parentId = args.parentId
+        isEditMode = (parentId != 0L)
+
+        setupToolbar()
         setupClickListeners()
         observeUiState()
+        setupUIForMode()
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+        if (isEditMode) {
+            binding.toolbar.title = "Editar Padre"
+        } else {
+            binding.toolbar.title = "Nuevo Padre"
+        }
+    }
+
+    private fun setupUIForMode() {
+        if (isEditMode) {
+            binding.tilUsername.isEnabled = false // No se puede cambiar el username
+            binding.tilPassword.isVisible = false
+            binding.tvPasswordHint.isVisible = false
+            binding.cardStatus.isVisible = true // Mostrar el estado de la cuenta
+        } else {
+            binding.tilUsername.isEnabled = true
+            binding.tilPassword.isVisible = true
+            binding.tvPasswordHint.isVisible = false
+            binding.fabChangePhoto.isVisible = false // No se puede cambiar foto sin crear
+            binding.ivProfilePicture.setOnClickListener(null) // Deshabilitar clic en imagen
+            binding.cardStatus.isVisible = false // No hay estado de cuenta aún
+        }
     }
 
     private fun setupClickListeners() {
@@ -80,12 +119,17 @@ class AdminEditParentFragment : Fragment(R.layout.fragment_admin_edit_parent) {
         }
 
         binding.fabChangePhoto.setOnClickListener {
-            checkPermissionsAndShowPicker()
+            if (isEditMode) {
+                checkPermissionsAndShowPicker()
+            } else {
+                Toast.makeText(context, "Guarda el padre antes de añadir una foto", Toast.LENGTH_SHORT).show()
+            }
         }
         binding.ivProfilePicture.setOnClickListener {
-            checkPermissionsAndShowPicker()
+            if (isEditMode) {
+                checkPermissionsAndShowPicker()
+            }
         }
-
     }
 
     private fun observeUiState() {
@@ -93,33 +137,45 @@ class AdminEditParentFragment : Fragment(R.layout.fragment_admin_edit_parent) {
             viewModel.uiState.collectLatest { state ->
                 binding.btnSaveChanges.isEnabled = !state.isLoading
                 binding.btnSaveChanges.text = if (state.isLoading) "Guardando..." else "Guardar Cambios"
+                binding.progressBar.isVisible = state.isLoading
 
-                if (state.parent != null && !state.isFormPopulated) {
+                // --- ¡AQUÍ ESTÁ LA LÍNEA QUE FALTABA! ---
+                // Oculta el formulario mientras carga, lo muestra cuando termina.
+                binding.nestedScrollView.isVisible = !state.isLoading
+                // --- FIN DE LA CORRECCIÓN ---
+
+
+                // Lógica de poblar formulario (corregida)
+                if (state.parent != null && !state.isFormPopulated && isEditMode) {
                     populateForm(state.parent)
                     viewModel.onFormPopulated()
                 }
 
-                val avatarUrl = if (!state.parent?.user?.profileImageUrl.isNullOrBlank()) {
-                    state.parent?.user?.profileImageUrl
+                // Lógica de imagen (corregida)
+                val avatarUrl = state.parent?.user?.profileImageUrl
+                if (!avatarUrl.isNullOrBlank()) {
+                    Glide.with(this@AdminEditParentFragment)
+                        .load(avatarUrl)
+                        .placeholder(R.drawable.ic_parent_avatar_24)
+                        .error(R.drawable.ic_parent_avatar_24)
+                        .circleCrop()
+                        .into(binding.ivProfilePicture)
                 } else {
-                    "https"
+                    // Cargar placeholder si no hay imagen
+                    Glide.with(this@AdminEditParentFragment)
+                        .load(R.drawable.ic_parent_avatar_24)
+                        .circleCrop()
+                        .into(binding.ivProfilePicture)
                 }
-                Glide.with(this@AdminEditParentFragment)
-                    .load(avatarUrl)
-                    .placeholder(R.drawable.ic_parent_avatar_24)
-                    .error(R.drawable.ic_parent_avatar_24)
-                    .circleCrop()
-                    .into(binding.ivProfilePicture)
-
 
                 if (state.isUpdateSuccessful) {
-                    Toast.makeText(context, "Padre actualizado correctamente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Operación exitosa", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 }
 
                 state.error?.let {
                     Toast.makeText(context, it, Toast.LENGTH_LONG).show()
-                    viewModel.errorShown() // Limpiar el error
+                    viewModel.errorShown()
                 }
             }
         }
@@ -131,6 +187,7 @@ class AdminEditParentFragment : Fragment(R.layout.fragment_admin_edit_parent) {
         binding.etLastName.setText(user.lastName)
         binding.etEmail.setText(user.email)
         binding.etPhone.setText(user.phone)
+        binding.etUsername.setText(user.username)
 
         binding.switchEnabled.isChecked = user.enabled
         binding.chipRole.text = "Rol: PADRE"
@@ -149,23 +206,48 @@ class AdminEditParentFragment : Fragment(R.layout.fragment_admin_edit_parent) {
         val lastName = binding.etLastName.text.toString().trim()
         val email = binding.etEmail.text.toString().trim()
         val phone = binding.etPhone.text.toString().trim().ifEmpty { null }
+        val username = binding.etUsername.text.toString().trim()
+        val password = binding.etPassword.text.toString()
 
-        val currentUsername = viewModel.uiState.value.parent?.user?.username
-        if (currentUsername == null) {
-            Toast.makeText(context, "No se pueden guardar cambios, datos no cargados.", Toast.LENGTH_SHORT).show()
-            return
+        if (isEditMode) {
+            // --- MODO EDICIÓN ---
+            if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || username.isBlank()) {
+                Toast.makeText(context, "Completa los campos obligatorios", Toast.LENGTH_SHORT).show()
+                return
+            }
+            val request = UpdateParentRequest(
+                username = username,
+                firstName = firstName,
+                lastName = lastName,
+                email = email,
+                phone = phone
+            )
+            viewModel.updateParent(request)
+
+        } else {
+            // --- MODO CREAR ---
+            if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || username.isBlank() || password.isBlank()) {
+                Toast.makeText(context, "Completa todos los campos obligatorios", Toast.LENGTH_SHORT).show()
+                return
+            }
+            if (password.length < 6) {
+                binding.tilPassword.error = "La contraseña debe tener al menos 6 caracteres"
+                return
+            }
+
+            val request = CreateParentRequest(
+                username = username,
+                firstName = firstName,
+                lastName = lastName,
+                email = email,
+                phone = phone,
+                password = password
+            )
+            viewModel.createParent(request)
         }
-
-        val request = UpdateParentRequest(
-            username = currentUsername,
-            firstName = firstName,
-            lastName = lastName,
-            email = email,
-            phone = phone
-        )
-        viewModel.saveChanges(request)
     }
 
+    // --- (Funciones de permisos, cámara, galería y URI) ---
     private fun checkPermissionsAndShowPicker() {
         val permissionsToRequest = mutableListOf<String>()
         permissionsToRequest.add(Manifest.permission.CAMERA)
