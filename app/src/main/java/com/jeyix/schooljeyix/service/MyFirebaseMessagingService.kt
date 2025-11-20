@@ -16,20 +16,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var userUseCases: UserUseCases
 
-    /**
-     * Se llama automáticamente cuando llega una notificación y la app está en primer plano.
-     */
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         Log.d("FCM", "Mensaje recibido: ${message.notification?.title}")
-        // Aquí puedes mostrar una notificación personalizada en la app
     }
 
-    /**
-     * ¡LA FUNCIÓN MÁS IMPORTANTE!
-     * Se llama automáticamente cuando Firebase genera un nuevo token para este dispositivo.
-     * (Ocurre en la primera instalación, al reinstalar, al borrar datos, etc.)
-     */
     @OptIn(DelicateCoroutinesApi::class)
     override fun onNewToken(token: String) {
         super.onNewToken(token)

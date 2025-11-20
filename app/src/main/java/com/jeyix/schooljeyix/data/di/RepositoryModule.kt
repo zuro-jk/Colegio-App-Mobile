@@ -3,6 +3,7 @@ package com.jeyix.schooljeyix.data.di
 import com.jeyix.schooljeyix.data.repository.auth.AuthRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.enrollment.EnrollmentRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.grade.GradeRepositoryImpl
+import com.jeyix.schooljeyix.data.repository.notifications.NotificationRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.parent.ParentRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.section.SectionRepositoryImpl
 import com.jeyix.schooljeyix.data.repository.student.StudentRepositoryImpl
@@ -10,6 +11,7 @@ import com.jeyix.schooljeyix.data.repository.users.UserRepositoryImpl
 import com.jeyix.schooljeyix.domain.repository.AuthRepository
 import com.jeyix.schooljeyix.domain.repository.EnrollmentRepository
 import com.jeyix.schooljeyix.domain.repository.GradeRepository
+import com.jeyix.schooljeyix.domain.repository.NotificationRepository
 import com.jeyix.schooljeyix.domain.repository.ParentRepository
 import com.jeyix.schooljeyix.domain.repository.SectionRepository
 import com.jeyix.schooljeyix.domain.repository.StudentRepository
@@ -65,4 +67,10 @@ abstract class RepositoryModule {
     abstract fun bindSectionRepository(
         sectionRepositoryImpl: SectionRepositoryImpl
     ): SectionRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindNotificationRepository(
+        notificationRepositoryImpl: NotificationRepositoryImpl
+    ): NotificationRepository
 }

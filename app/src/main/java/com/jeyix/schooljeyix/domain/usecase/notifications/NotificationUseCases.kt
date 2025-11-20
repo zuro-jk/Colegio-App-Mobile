@@ -10,10 +10,7 @@ class NotificationUseCases @Inject constructor(
     private val repository: NotificationRepository
 ){
 
-    /**
-     * Caso de Uso para enviar un anuncio desde el panel de administrador.
-     * Valida los datos y luego llama al repositorio para enviar el evento a Kafka.
-     */
+
     suspend fun sendAnnouncement(
         title: String,
         body: String,
@@ -35,10 +32,7 @@ class NotificationUseCases @Inject constructor(
         return repository.sendAnnouncement(request)
     }
 
-    /**
-     * Caso de Uso para enviar un mensaje de contacto.
-     * Valida los datos y luego llama al repositorio para enviar el email.
-     */
+
     suspend fun sendContact(
         subject: String,
         message: String,

@@ -13,13 +13,26 @@ class EnrollmentRepositoryImpl @Inject constructor(
     private val api: EnrollmentApi
 ): EnrollmentRepository {
 
+    override suspend fun getAllEnrollments(): Resource<List<EnrollmentResponse>> {
+        return try {
+            val response = api.getAllEnrollments()
+            if (response.isSuccessful && response.body()?.data != null) {
+                Resource.Success(response.body()!!.data!!)
+            } else {
+                Resource.Error(response.errorBody()?.string() ?: "Error al obtener todas las matrículas.")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Error de conexión.")
+        }
+    }
+
     override suspend fun getMyEnrollments(): Resource<List<EnrollmentResponse>> {
         return try {
             val response = api.getMyEnrollments()
             if (response.isSuccessful && response.body()?.data != null) {
                 Resource.Success(response.body()!!.data!!)
             } else {
-                Resource.Error(response.errorBody()?.string() ?: "Error al obtener matrículas.")
+                Resource.Error(response.errorBody()?.string() ?: "Error al obtener tus matrículas.")
             }
         } catch (e: Exception) {
             Resource.Error(e.message ?: "Error de conexión.")

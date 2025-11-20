@@ -7,6 +7,7 @@ import com.jeyix.schooljeyix.data.remote.core.UnauthorizedInterceptor
 import com.jeyix.schooljeyix.data.remote.feature.auth.api.AuthApi
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.api.EnrollmentApi
 import com.jeyix.schooljeyix.data.remote.feature.grade.api.GradeApi
+import com.jeyix.schooljeyix.data.remote.feature.notifications.api.NotificationApi
 import com.jeyix.schooljeyix.data.remote.feature.parent.api.ParentApi
 import com.jeyix.schooljeyix.data.remote.feature.section.api.SectionApi
 import com.jeyix.schooljeyix.data.remote.feature.student.api.StudentApi
@@ -92,4 +93,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideSectionApi(retrofit: Retrofit): SectionApi = retrofit.create(SectionApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNotificationApi(retrofit: Retrofit): NotificationApi = retrofit.create(
+        NotificationApi::class.java)
 }

@@ -77,6 +77,17 @@
         android:id="@+id/nav_admin_communications"
         android:name="com.jeyix.schooljeyix.ui.admin.notifications.NotificationsFragment"
         android:label="Comunicaciones"
-        tools:layout="@layout/fragment_admin_notifications" />
+        tools:layout="@layout/fragment_admin_notifications">
+
+        <action
+            android:id="@+id/action_nav_admin_communications_to_createAnnouncementFragment"
+            app:destination="@id/createAnnouncementFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createAnnouncementFragment"
+        android:name="com.jeyix.schooljeyix.ui.admin.notifications.form.AdminCreateAnnouncementFragment"
+        android:label="Crear Anuncio"
+        tools:layout="@layout/fragment_admin_create_announcement" />
 
 </navigation>

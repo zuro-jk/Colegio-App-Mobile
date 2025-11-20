@@ -6,9 +6,13 @@ import com.jeyix.schooljeyix.domain.util.Resource
 
 interface EnrollmentRepository {
 
+    /**
+     * ADMIN: Obtiene todas las matrículas del sistema.
+     */
+    suspend fun getAllEnrollments(): Resource<List<EnrollmentResponse>>
 
     /**
-     * Obtiene la lista de matrículas de los hijos del padre autenticado.
+     * PADRE: Obtiene la lista de matrículas de sus hijos.
      */
     suspend fun getMyEnrollments(): Resource<List<EnrollmentResponse>>
 
@@ -18,7 +22,7 @@ interface EnrollmentRepository {
     suspend fun getEnrollmentById(id: Long): Resource<EnrollmentResponse>
 
     /**
-     * Crea una nueva matrícula para un estudiante.
+     * Crea una nueva matrícula.
      */
     suspend fun createEnrollment(request: EnrollmentRequest): Resource<EnrollmentResponse>
 
