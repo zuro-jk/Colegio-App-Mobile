@@ -84,9 +84,6 @@ class AdminStudentFormViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Esta función se llama desde el Fragment cuando el usuario selecciona un Grado.
-     */
     fun onGradeSelected(gradeId: Long) {
         _uiState.update { it.copy(sectionList = emptyList()) }
         viewModelScope.launch {
@@ -94,9 +91,6 @@ class AdminStudentFormViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Carga las secciones para un grado específico.
-     */
     private suspend fun loadSections(gradeId: Long) {
         when(val sectionsResult = sectionUseCases.getSectionsByGradeId(gradeId)) {
             is Resource.Success -> {
@@ -178,9 +172,6 @@ class AdminStudentFormViewModel @Inject constructor(
         }
     }
 
-    /**
-     * El Fragment llama a esto después de 'populateForm' para evitar que se repita.
-     */
     fun onFormPopulated() {
         _uiState.update { it.copy(isFormPopulated = true) }
     }

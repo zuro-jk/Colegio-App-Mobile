@@ -76,36 +76,44 @@ class DashboardViewModel @Inject constructor(
                 })
 
                 val today = LocalDate.now()
+                val weekFields = WeekFields.of(Locale.getDefault())
+                val weekOfYearNow = today.get(weekFields.weekOfWeekBasedYear())
+
                 enrollments.forEach { enrollment ->
                     enrollment.payments.forEach { payment ->
 
                         if (payment.isPaid) {
-                            val amount = payment.amount.toDouble()
+                            val originalAmount = payment.amount.toDouble()
+                            val discount = payment.appliedDiscount?.toDouble() ?: 0.0
 
-                            totalRealIncome += amount
+                            val realPaidAmount = originalAmount - discount
 
-                            try {
-                                val paymentDate = LocalDate.parse(payment.dueDate.take(10))
+                            totalRealIncome += realPaidAmount
 
-                                val weekFields = WeekFields.of(Locale.getDefault())
-                                val weekOfYearPayment = paymentDate.get(weekFields.weekOfWeekBasedYear())
-                                val weekOfYearNow = today.get(weekFields.weekOfWeekBasedYear())
+                            val dateString = payment.paymentDate
 
-                                if (weekOfYearPayment == weekOfYearNow && paymentDate.year == today.year) {
-                                    val dayIndex = paymentDate.dayOfWeek.value - 1
+                            if (dateString != null) {
+                                try {
+                                    val paidDate = LocalDate.parse(dateString.take(10))
+                                    val weekOfPayment = paidDate.get(weekFields.weekOfWeekBasedYear())
 
-                                    if (dayIndex in 0..4) {
-                                        chartValues[dayIndex] += amount.toFloat()
+                                    if (weekOfPayment == weekOfYearNow && paidDate.year == today.year) {
+                                        val dayIndex = paidDate.dayOfWeek.value - 1
+
+                                        if (dayIndex in 0..4) {
+                                            chartValues[dayIndex] += realPaidAmount.toFloat()
+                                        }
                                     }
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
                                 }
-                            } catch (e: Exception) {
-                                e.printStackTrace()
                             }
                         }
                     }
                 }
             }
 
+            // 5. Actualizar Estado
             _uiState.update {
                 it.copy(
                     isLoading = false,

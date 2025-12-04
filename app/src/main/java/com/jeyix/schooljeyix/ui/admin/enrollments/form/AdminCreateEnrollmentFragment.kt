@@ -1,6 +1,5 @@
 package com.jeyix.schooljeyix.ui.admin.enrollments.form
 
-
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -13,12 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jeyix.schooljeyix.R
-import com.jeyix.schooljeyix.data.remote.feature.student.response.StudentResponse
 import com.jeyix.schooljeyix.databinding.FragmentAdminCreateEnrollmentBinding
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @AndroidEntryPoint
 class AdminCreateEnrollmentFragment : Fragment(R.layout.fragment_admin_create_enrollment) {
@@ -26,7 +25,6 @@ class AdminCreateEnrollmentFragment : Fragment(R.layout.fragment_admin_create_en
     private var _binding: FragmentAdminCreateEnrollmentBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CreateEnrollmentViewModel by viewModels()
-    private var studentsList: List<StudentResponse> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,10 +32,31 @@ class AdminCreateEnrollmentFragment : Fragment(R.layout.fragment_admin_create_en
 
         toggleMainNavigation(false)
 
+        setupToolbar()
         setupYearSelector()
+        setupClickListeners()
 
+        observeStudents()
+        observeState()
+    }
+
+    private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+    }
 
+    private fun setupYearSelector() {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val years = listOf(currentYear.toString(), (currentYear + 1).toString())
+
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, years)
+        binding.actvAcademicYear.setAdapter(adapter)
+
+        if (binding.actvAcademicYear.text.isEmpty()) {
+            binding.actvAcademicYear.setText(currentYear.toString(), false)
+        }
+    }
+
+    private fun setupClickListeners() {
         binding.btnSave.setOnClickListener {
             viewModel.createEnrollment(
                 academicYear = binding.actvAcademicYear.text.toString(),
@@ -45,28 +64,11 @@ class AdminCreateEnrollmentFragment : Fragment(R.layout.fragment_admin_create_en
                 installmentsStr = binding.etInstallments.text.toString()
             )
         }
-
-        observeState()
-        observeStudents()
-    }
-
-    private fun setupYearSelector() {
-        val currentYear = java.time.Year.now().value
-        val years = listOf(currentYear.toString(), (currentYear + 1).toString())
-
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, years)
-        binding.actvAcademicYear.setAdapter(adapter)
-
-        if (binding.actvAcademicYear.text.isEmpty()) {
-            binding.actvAcademicYear.setText(years[0], false)
-        }
     }
 
     private fun observeStudents() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.studentsList.collectLatest { students ->
-                studentsList = students
-
                 val studentNames = students.map { it.user.fullName }
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, studentNames)
 
@@ -89,27 +91,30 @@ class AdminCreateEnrollmentFragment : Fragment(R.layout.fragment_admin_create_en
             viewModel.uiState.collectLatest { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        if (result.data == null && result.message == null) {
-                            binding.progressBar.isVisible = false
-                            binding.btnSave.isEnabled = true
-                        } else {
-                            binding.progressBar.isVisible = true
-                            binding.btnSave.isEnabled = false
+                        val isLoading = result.data != null
+                        if (result.message != null) {
+                            setLoading(true)
                         }
                     }
                     is Resource.Success -> {
-                        binding.progressBar.isVisible = false
-                        Toast.makeText(context, "Matrícula creada exitosamente", Toast.LENGTH_SHORT).show()
+                        setLoading(false)
+                        Toast.makeText(context, "Matrícula registrada correctamente", Toast.LENGTH_SHORT).show()
                         findNavController().popBackStack()
                     }
                     is Resource.Error -> {
-                        binding.progressBar.isVisible = false
-                        binding.btnSave.isEnabled = true
-                        Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
+                        setLoading(false)
+                        // ELIMINA EL IF, muestra siempre el error para depurar
+                        Toast.makeText(context, result.message ?: "Error desconocido", Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.progressBar.isVisible = isLoading
+        binding.btnSave.text = if (isLoading) "" else "Registrar Matrícula"
+        binding.btnSave.isEnabled = !isLoading
     }
 
     private fun toggleMainNavigation(show: Boolean) {

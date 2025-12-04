@@ -25,7 +25,6 @@ class CreateEnrollmentViewModel @Inject constructor(
 
     private val _studentsList = MutableStateFlow<List<StudentResponse>>(emptyList())
     val studentsList = _studentsList.asStateFlow()
-
     var selectedStudentId: Long? = null
 
     init {

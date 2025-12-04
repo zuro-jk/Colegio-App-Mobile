@@ -3,20 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_24"
-        android:title="Buscar"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView" />
-
-    <item
-        android:id="@+id/action_settings"
-        android:title="Configuración"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_logout"
-        android:title="Cerrar Sesión"
-        app:showAsAction="never" />
-
+        android:id="@+id/action_profile_shortcut"
+        android:icon="@drawable/ic_account_circle_24"
+        android:title="Perfil"
+        app:showAsAction="ifRoom" />
 </menu>

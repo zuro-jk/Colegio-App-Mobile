@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -33,19 +34,35 @@ class AdminMainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         binding.bottomNav.setupWithNavController(navController)
-        binding.topAppBar.setupWithNavController(navController)
 
-        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+        setSupportActionBar(binding.topAppBar)
+        binding.topAppBar.setNavigationOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.action_settings -> {
-                    Toast.makeText(this, "Configuración (Próximamente)", Toast.LENGTH_SHORT).show()
-                    true
+                R.id.nav_profile -> {
+                    Toast.makeText(this, "Perfil de Admin", Toast.LENGTH_SHORT).show()
                 }
-                R.id.action_logout -> {
+                R.id.nav_settings -> {
+                    Toast.makeText(this, "Configuración", Toast.LENGTH_SHORT).show()
+                }
+                R.id.nav_logout -> {
                     lifecycleScope.launch {
                         logoutUseCase()
                         navigateToLogin()
                     }
+                }
+            }
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
+
+        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_profile_shortcut -> {
+                    Toast.makeText(this, "Perfil", Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> false

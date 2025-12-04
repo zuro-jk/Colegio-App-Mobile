@@ -21,6 +21,7 @@ import com.jeyix.schooljeyix.databinding.ParentFragmentPaymentsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 @AndroidEntryPoint
 class PaymentsFragment : Fragment() {
@@ -41,7 +42,9 @@ class PaymentsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = ParentFragmentPaymentsBinding.inflate(inflater, container, false)
+
         paymentSheet = PaymentSheet(this, ::onPaymentSheetResult)
+
         return binding.root
     }
 
@@ -52,7 +55,6 @@ class PaymentsFragment : Fragment() {
         observeUiState()
         observeEvents()
 
-        // Click en Pagar Todo
         binding.btnPayAll.setOnClickListener {
             val state = viewModel.uiState.value
             val enrollmentId = state.paymentItems.firstOrNull()?.enrollmentId
@@ -67,7 +69,6 @@ class PaymentsFragment : Fragment() {
                 Toast.makeText(context, "No hay deudas pendientes", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     override fun onResume() {
@@ -91,24 +92,13 @@ class PaymentsFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
 
-                    paymentsAdapter.submitList(state.paymentItems)
+                    val isAllPaid = state.totalDue.compareTo(BigDecimal.ZERO) == 0 && state.paymentItems.isNotEmpty()
 
-                    binding.switchDiscount.setOnCheckedChangeListener(null)
-
-                    binding.switchDiscount.isEnabled = state.canApplyDiscount
-                    if (!state.canApplyDiscount) {
-                        binding.tvDiscountLabel.text = "Descuento no disponible (Fecha expirada)"
-                        binding.switchDiscount.isChecked = false
+                    if (isAllPaid) {
+                        showSuccessState()
                     } else {
-                        binding.tvDiscountLabel.text = "Aplicar Dscto. Anual"
-                        binding.switchDiscount.isChecked = state.isDiscountActive
+                        showPaymentState(state)
                     }
-
-                    binding.switchDiscount.setOnCheckedChangeListener { _, isChecked ->
-                        viewModel.toggleDiscount(isChecked)
-                    }
-
-                    updateSummaryCard(state)
 
                     state.error?.let {
                         Toast.makeText(context, it, Toast.LENGTH_LONG).show()
@@ -118,25 +108,63 @@ class PaymentsFragment : Fragment() {
         }
     }
 
-    private fun updateSummaryCard(state: PaymentsUiState) {
+    private fun showSuccessState() {
+        binding.cardSummary.visibility = View.GONE
+        binding.rvPayments.visibility = View.GONE
+
+        binding.layoutAllPaid.visibility = View.VISIBLE
+    }
+
+    private fun showPaymentState(state: PaymentsUiState) {
+        binding.layoutAllPaid.visibility = View.GONE
+
+        binding.cardSummary.visibility = View.VISIBLE
+
+        paymentsAdapter.submitList(state.paymentItems)
+
+        binding.switchDiscount.setOnCheckedChangeListener(null)
+
+        binding.switchDiscount.isEnabled = state.canApplyDiscount
+        if (!state.canApplyDiscount) {
+            binding.tvDiscountLabel.text = "Descuento no disponible"
+            binding.switchDiscount.isChecked = false
+        } else {
+            binding.tvDiscountLabel.text = "Aplicar Dscto. Anual"
+            binding.switchDiscount.isChecked = state.isDiscountActive
+        }
+
+        binding.switchDiscount.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.toggleDiscount(isChecked)
+        }
+
+        updateSummaryCardContent(state)
+    }
+
+    private fun updateSummaryCardContent(state: PaymentsUiState) {
         val context = requireContext()
 
         if (state.isDiscountActive && state.canApplyDiscount) {
             binding.tvOriginalAmount.text = "S/ ${state.totalDue}"
             binding.tvOriginalAmount.paintFlags = binding.tvOriginalAmount.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             binding.tvOriginalAmount.visibility = View.VISIBLE
+
             binding.tvTotalDueAmount.text = "S/ ${state.discountedTotal}"
-            binding.tvTotalDueAmount.setTextColor(ContextCompat.getColor(context, R.color.white))
+            binding.tvTotalDueAmount.setTextColor(ContextCompat.getColor(context, R.color.accent_teal))
+
             binding.chipSavings.text = "Ahorras S/ ${state.discountAmount}"
             binding.chipSavings.visibility = View.VISIBLE
+
             binding.btnPayAll.text = "Pagar S/ ${state.discountedTotal}"
 
             binding.rvPayments.visibility = View.GONE
+
         } else {
             binding.tvOriginalAmount.visibility = View.GONE
             binding.chipSavings.visibility = View.GONE
+
             binding.tvTotalDueAmount.text = "S/ ${state.totalDue}"
             binding.tvTotalDueAmount.setTextColor(ContextCompat.getColor(context, R.color.white))
+
             binding.btnPayAll.text = "Pagar Todo"
 
             binding.rvPayments.visibility = View.VISIBLE
@@ -149,7 +177,6 @@ class PaymentsFragment : Fragment() {
                 viewModel.paymentEvent.collectLatest { event ->
                     when (event) {
                         is PaymentsViewModel.PaymentEvent.LaunchStripeSheet -> {
-                            // Guardamos el secreto aquí
                             currentClientSecret = event.stripeData.paymentIntentClientSecret
                             presentPaymentSheet(event.stripeData.paymentIntentClientSecret, event.stripeData.publishableKey)
                         }
@@ -199,7 +226,7 @@ class PaymentsFragment : Fragment() {
                         }
                     }
                 } else {
-                    Toast.makeText(context, "Error interno: Datos de sesión perdidos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error interno: Datos perdidos", Toast.LENGTH_SHORT).show()
                 }
             }
         }

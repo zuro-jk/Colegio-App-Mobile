@@ -264,7 +264,6 @@ class AdminStudentFormFragment : Fragment(R.layout.fragment_admin_student_form) 
     }
 
     private fun checkPermissionsAndShowPicker() {
-        // Lista de permisos necesarios
         val permissionsToRequest = mutableListOf<String>()
         permissionsToRequest.add(Manifest.permission.CAMERA)
 
@@ -314,9 +313,6 @@ class AdminStudentFormFragment : Fragment(R.layout.fragment_admin_student_form) 
         }
     }
 
-    /**
-     * Crea un Uri en el almacenamiento compartido (Media Store) para que la cámara guarde la foto.
-     */
     private fun createImageUri(): Uri? {
         val contentResolver = requireContext().contentResolver
         val contentValues = ContentValues().apply {
@@ -337,10 +333,25 @@ class AdminStudentFormFragment : Fragment(R.layout.fragment_admin_student_form) 
         val phone = binding.etPhone.text.toString().trim().ifEmpty { null }
         val password = binding.etPassword.text.toString()
 
+        val academicYear = binding.etAcademicYear.text.toString().trim()
+        val totalAmountStr = binding.etTotalAmount.text.toString().trim()
+        val installmentsStr = binding.etInstallments.text.toString().trim()
+
         if (firstName.isBlank() || lastName.isBlank() || username.isBlank() || email.isBlank() ||
             selectedParentId == null || selectedGradeId == null || selectedSectionId == null) {
-            Toast.makeText(context, "Por favor, completa todos los campos (incluyendo Padre, Grado y Sección)", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Por favor, completa todos los campos del estudiante", Toast.LENGTH_SHORT).show()
             return
+        }
+
+        if (args.studentId == null) {
+            if (password.isBlank()) {
+                binding.tilPassword.error = "La contraseña es obligatoria"
+                return
+            }
+            if (academicYear.isBlank() || totalAmountStr.isBlank() || installmentsStr.isBlank()) {
+                Toast.makeText(context, "Completa los datos de matrícula", Toast.LENGTH_SHORT).show()
+                return
+            }
         }
 
         if (args.studentId != null) {
@@ -356,12 +367,8 @@ class AdminStudentFormFragment : Fragment(R.layout.fragment_admin_student_form) 
             viewModel.updateStudent(request)
 
         } else {
-            if (password.isBlank()) {
-                binding.tilPassword.error = "La contraseña es obligatoria para crear"
-                return
-            } else {
-                binding.tilPassword.error = null
-            }
+            val totalAmount = totalAmountStr.toBigDecimalOrNull() ?: java.math.BigDecimal.ZERO
+            val installments = installmentsStr.toIntOrNull() ?: 0
 
             val request = CreateStudentRequest(
                 username = username,
@@ -371,7 +378,12 @@ class AdminStudentFormFragment : Fragment(R.layout.fragment_admin_student_form) 
                 password = password,
                 phone = phone,
                 parentId = selectedParentId!!,
-                sectionId = selectedSectionId!!
+                sectionId = selectedSectionId!!,
+
+                // Campos nuevos
+                academicYear = academicYear,
+                totalAmount = totalAmount,
+                numberOfInstallments = installments
             )
             viewModel.saveStudent(request)
         }

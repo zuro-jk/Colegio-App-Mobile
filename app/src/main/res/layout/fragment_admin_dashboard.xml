@@ -177,28 +177,28 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAddPayment"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.App.Button.DashboardAction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Registrar Pago"
+                    android:text="Pago"
                     android:layout_marginEnd="8dp"
                     app:icon="@drawable/ic_payments_24"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAddStudent"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.App.Button.DashboardAction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nuevo Alumno"
+                    android:text="Alumno"
                     android:layout_marginEnd="8dp"
                     app:icon="@drawable/ic_student_24"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSendNotice"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    style="@style/Widget.App.Button.DashboardAction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enviar Aviso"
+                    android:text="Aviso"
                     app:icon="@drawable/ic_notifications_24"/>
             </LinearLayout>
         </HorizontalScrollView>

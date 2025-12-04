@@ -115,12 +115,4 @@
         android:label="Crear Anuncio"
         tools:layout="@layout/fragment_admin_create_announcement" />
 
-
-
-
-
-
-
-
-
 </navigation>
