@@ -118,6 +118,19 @@ class StudentRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun activateStudent(studentId: Long): Resource<Unit> {
+        return try {
+            val response = api.activateStudent(studentId)
+            if (response.isSuccessful) {
+                Resource.Success(Unit)
+            } else {
+                Resource.Error(response.errorBody()?.string() ?: "Error al activar el estudiante.")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Error de conexión.")
+        }
+    }
+
     override suspend fun deleteStudent(studentId: Long): Resource<Unit> {
         return try {
             val response = api.deleteStudent(studentId)

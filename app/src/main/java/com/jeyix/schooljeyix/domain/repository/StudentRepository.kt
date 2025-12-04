@@ -35,6 +35,8 @@ interface StudentRepository {
         request: UpdateStudentRequest
     ): Resource<StudentResponse>
 
+    suspend fun activateStudent(studentId: Long): Resource<Unit>
+
     /**
      * Elimina un estudiante
      * Devuelve Resource<Unit> para indicar éxito/fracaso de la operación.

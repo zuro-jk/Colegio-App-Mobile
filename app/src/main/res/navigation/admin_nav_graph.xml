@@ -115,4 +115,17 @@
         android:label="Crear Anuncio"
         tools:layout="@layout/fragment_admin_create_announcement" />
 
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.jeyix.schooljeyix.ui.admin.users.profile.AdminProfileFragment"
+        android:label="Mi Perfil"
+        tools:layout="@layout/fragment_admin_profile">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.jeyix.schooljeyix.ui.admin.users.settings.AdminSettingsFragment"
+        android:label="Configuración"
+        tools:layout="@layout/fragment_admin_settings" />
+
 </navigation>

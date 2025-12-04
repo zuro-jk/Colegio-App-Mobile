@@ -2,11 +2,12 @@ package com.jeyix.schooljeyix.ui.admin
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.databinding.ActivityAdminMainBinding
@@ -41,28 +42,27 @@ class AdminMainActivity : AppCompatActivity() {
         }
 
         binding.navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_profile -> {
-                    Toast.makeText(this, "Perfil de Admin", Toast.LENGTH_SHORT).show()
-                }
-                R.id.nav_settings -> {
-                    Toast.makeText(this, "Configuración", Toast.LENGTH_SHORT).show()
-                }
+            val handled = when (menuItem.itemId) {
                 R.id.nav_logout -> {
                     lifecycleScope.launch {
                         logoutUseCase()
                         navigateToLogin()
                     }
+                    true
+                }
+                else -> {
+                    menuItem.onNavDestinationSelected(navController)
                 }
             }
+
             binding.drawerLayout.closeDrawer(GravityCompat.START)
-            true
+            handled
         }
 
         binding.topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_profile_shortcut -> {
-                    Toast.makeText(this, "Perfil", Toast.LENGTH_SHORT).show()
+                    navController.navigate(R.id.nav_profile)
                     true
                 }
                 else -> false

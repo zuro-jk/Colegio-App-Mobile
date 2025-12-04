@@ -30,7 +30,6 @@ class AdminStudentListAdapter(
         fun bind(student: StudentResponse) {
             val context = itemView.context
 
-            // Usamos los campos de StudentResponse
             binding.tvUserName.text = student.user.fullName
             binding.tvUserEmail.text = student.user.username
 
@@ -39,22 +38,47 @@ class AdminStudentListAdapter(
             } else {
                 "https://api.dicebear.com/8.x/adventurer/svg?seed=${student.user.username}"
             }
+
             Glide.with(context)
                 .load(avatarUrl)
                 .placeholder(R.drawable.ic_account_circle_24)
                 .into(binding.ivUserAvatar)
 
-            binding.chipUserRole.text = "ESTUDIANTE"
-            binding.chipUserRole.setChipBackgroundColorResource(R.color.secondary)
+            if (student.active) {
+                binding.root.alpha = 1.0f
+                binding.chipUserRole.text = "ESTUDIANTE"
+                binding.chipUserRole.setChipBackgroundColorResource(R.color.secondary)
+            } else {
+                binding.root.alpha = 0.5f
+                binding.chipUserRole.text = "INACTIVO"
+                binding.chipUserRole.setChipBackgroundColorResource(android.R.color.darker_gray)
+            }
 
-            // Menú de opciones
             binding.btnMoreOptions.setOnClickListener { view ->
                 val popup = PopupMenu(context, view)
                 popup.menuInflater.inflate(R.menu.admin_user_item_menu, popup.menu)
+
+                val deleteItem = popup.menu.findItem(R.id.action_delete_user)
+                val editItem = popup.menu.findItem(R.id.action_edit_user)
+
+                if (student.active) {
+                    deleteItem.title = "Eliminar"
+                    editItem.isVisible = true
+                } else {
+                    deleteItem.title = "Restaurar"
+                    editItem.isVisible = false
+                }
+
                 popup.setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.action_edit_user -> onOptionClick(student, "edit")
-                        R.id.action_delete_user -> onOptionClick(student, "delete")
+                        R.id.action_delete_user -> {
+                            if (student.active) {
+                                onOptionClick(student, "delete")
+                            } else {
+                                onOptionClick(student, "activate")
+                            }
+                        }
                     }
                     true
                 }

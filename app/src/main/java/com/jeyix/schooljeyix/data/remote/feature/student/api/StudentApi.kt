@@ -10,6 +10,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
@@ -61,6 +62,11 @@ interface StudentApi {
         @Path("id") studentId: Long,
         @Body request: UpdateStudentRequest
     ): Response<ApiResponse<StudentResponse>>
+
+    @PATCH("students/{id}/activate")
+    suspend fun activateStudent(
+        @Path("id") studentId: Long
+    ): Response<ApiResponse<Void>>
 
     /**
      * Elimina un estudiante

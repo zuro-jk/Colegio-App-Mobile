@@ -6,5 +6,6 @@ data class StudentResponse(
     val section: String,
     val parentId: Long?,
     val parentName: String?,
-    val user: UserSummary
+    val user: UserSummary,
+    val active: Boolean
 )
