@@ -28,34 +28,29 @@ class PaymentsAdapter(private val onPayClick: (PaymentItem) -> Unit) :
     inner class PaymentViewHolder(private val binding: ItemPaymentBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        // --- MÉTODO BIND COMPLETAMENTE REESCRITO ---
         fun bind(payment: PaymentItem) {
             val context = itemView.context
 
-            // 1. Asignar los textos principales
             binding.tvPaymentConcept.text = payment.concept
             binding.tvPaymentAmount.text = "S/ ${payment.amount}"
 
-            // 2. Combinamos el nombre y la fecha de vencimiento para más claridad
             val formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy", Locale("es", "ES"))
             binding.tvStudentName.text = "Para: ${payment.studentName} ・ Vence ${payment.dueDate.format(formatter)}"
 
-            // 3. Lógica para la etiqueta de estado (tvStatusTag)
             when {
                 payment.isPaid -> {
-                    binding.tvStatusTag.visibility = View.VISIBLE
                     binding.tvStatusTag.text = "PAGADO"
                     binding.tvStatusTag.background = ContextCompat.getDrawable(context, R.drawable.bg_status_paid)
-                }
-                payment.isOverdue -> {
-                    binding.tvStatusTag.visibility = View.VISIBLE
-                    binding.tvStatusTag.text = "VENCIDO"
-                    binding.tvStatusTag.background = ContextCompat.getDrawable(context, R.drawable.bg_status_overdue)
+
+                    binding.btnPayNow.visibility = View.GONE
                 }
                 else -> {
-                    binding.tvStatusTag.visibility = View.VISIBLE
-                    binding.tvStatusTag.text = "PENDIENTE"
-                    binding.tvStatusTag.background = ContextCompat.getDrawable(context, R.drawable.bg_status_pending)
+                    binding.tvStatusTag.text = if(payment.isOverdue) "VENCIDO" else "PENDIENTE"
+                    binding.tvStatusTag.background = ContextCompat.getDrawable(context,
+                        if(payment.isOverdue) R.drawable.bg_status_overdue else R.drawable.bg_status_pending)
+
+                    binding.btnPayNow.visibility = View.VISIBLE
+                    binding.btnPayNow.setOnClickListener { onPayClick(payment) }
                 }
             }
 

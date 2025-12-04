@@ -60,7 +60,6 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        // --- Configuración de la Card "Aplicación" ---
         binding.optionNotifications.apply {
             ivOptionIcon.setImageResource(R.drawable.ic_notifications_24)
             tvOptionText.text = "Preferencias de Notificación"
@@ -77,7 +76,6 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        // --- Configuración del Botón de Logout ---
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
         }
@@ -90,10 +88,16 @@ class ProfileFragment : Fragment() {
                     state.userProfile?.let { user ->
                         binding.tvProfileName.text = user.fullName
 
+                        val avatarUrl = if (!user.profileImageUrl.isNullOrEmpty()) {
+                            user.profileImageUrl
+                        } else {
+                            "https://api.dicebear.com/9.x/initials/svg?seed=${user.fullName}"
+                        }
+
                         Glide.with(this@ProfileFragment)
-                            .load(user.profileImageUrl)
-                            .placeholder(R.drawable.ic_parent_avatar_24)
-                            .error(R.drawable.ic_parent_avatar_24)
+                            .load(avatarUrl)
+                            .placeholder(R.drawable.ic_avatar_default)
+                            .error(R.drawable.ic_avatar_default)
                             .into(binding.ivProfileAvatar)
                     }
 

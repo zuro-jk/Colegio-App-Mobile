@@ -3,6 +3,7 @@ package com.jeyix.schooljeyix.data.repository.notifications
 import com.jeyix.schooljeyix.data.remote.feature.notifications.api.NotificationApi
 import com.jeyix.schooljeyix.data.remote.feature.notifications.request.AnnouncementRequest
 import com.jeyix.schooljeyix.data.remote.feature.notifications.request.ContactNotificationEvent
+import com.jeyix.schooljeyix.data.remote.feature.notifications.response.NotificationResponse
 import com.jeyix.schooljeyix.domain.repository.NotificationRepository
 import com.jeyix.schooljeyix.domain.util.Resource
 import javax.inject.Inject
@@ -11,6 +12,18 @@ class NotificationRepositoryImpl @Inject constructor(
     private val api: NotificationApi
 ): NotificationRepository {
 
+    override suspend fun getAllNotifications(): Resource<List<NotificationResponse>> {
+        return try {
+            val response = api.getAllNotifications()
+            if (response.isSuccessful && response.body()?.data != null) {
+                Resource.Success(response.body()!!.data!!)
+            } else {
+                Resource.Error(response.errorBody()?.string() ?: "Error al obtener las notificaciones.")
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "Error de conexión.")
+        }
+    }
 
     override suspend fun sendContact(contactRequest: ContactNotificationEvent): Resource<String> {
         return try {

@@ -6,13 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.databinding.FragmentAdminNotificationsBinding
-import com.jeyix.schooljeyix.domain.model.Announcement
-import com.jeyix.schooljeyix.domain.model.AnnouncementType
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NotificationsFragment : Fragment() {
@@ -20,6 +25,7 @@ class NotificationsFragment : Fragment() {
     private var _binding: FragmentAdminNotificationsBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: NotificationsViewModel by viewModels()
     private lateinit var adapter: AnnouncementsAdapter
 
     override fun onCreateView(
@@ -35,8 +41,15 @@ class NotificationsFragment : Fragment() {
 
         setupRecyclerView()
         setupFab()
+        observeData()
+    }
 
-        loadDummyData()
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            delay(500)
+            viewModel.refreshAnnouncements()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -56,15 +69,14 @@ class NotificationsFragment : Fragment() {
         }
     }
 
-    private fun loadDummyData() {
-        val dummyList = listOf(
-            Announcement(1, "Suspensión de Clases", "Debido al mantenimiento eléctrico, mañana no habrá clases.", "Todos", "Hace 10m",
-                AnnouncementType.URGENT, true),
-            Announcement(2, "Recordatorio de Pago", "La mensualidad de Noviembre vence pronto.", "Padres", "Hace 2h", AnnouncementType.PAYMENT, false),
-            Announcement(3, "Feria de Ciencias", "Están invitados a la feria anual este sábado.", "Todos", "Ayer", AnnouncementType.INFO, false),
-            Announcement(4, "Reunión de Profesores", "Reunión de coordinación en la sala de maestros.", "Profesores", "Hace 3 días", AnnouncementType.INFO, true)
-        )
-        adapter.submitList(dummyList)
+    private fun observeData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.announcements.collectLatest { list ->
+                    adapter.submitList(list)
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

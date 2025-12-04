@@ -1,19 +1,25 @@
 package com.jeyix.schooljeyix.ui.parent.payments
 
+import android.graphics.Paint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.stripe.android.PaymentConfiguration
+import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheetResult
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.databinding.ParentFragmentPaymentsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -25,11 +31,17 @@ class PaymentsFragment : Fragment() {
     private val viewModel: PaymentsViewModel by viewModels()
     private lateinit var paymentsAdapter: PaymentsAdapter
 
+    private lateinit var paymentSheet: PaymentSheet
+
+    private var currentClientSecret: String? = null
+    private var currentPaymentId: Long? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = ParentFragmentPaymentsBinding.inflate(inflater, container, false)
+        paymentSheet = PaymentSheet(this, ::onPaymentSheetResult)
         return binding.root
     }
 
@@ -38,13 +50,35 @@ class PaymentsFragment : Fragment() {
 
         setupRecyclerView()
         observeUiState()
+        observeEvents()
+
+        // Click en Pagar Todo
+        binding.btnPayAll.setOnClickListener {
+            val state = viewModel.uiState.value
+            val enrollmentId = state.paymentItems.firstOrNull()?.enrollmentId
+
+            if (enrollmentId != null) {
+                if (state.isDiscountActive) {
+                    viewModel.onPayAllClicked(enrollmentId)
+                } else {
+                    Toast.makeText(context, "Activa el descuento para pagar el total anual", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(context, "No hay deudas pendientes", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadPayments()
     }
 
     private fun setupRecyclerView() {
         paymentsAdapter = PaymentsAdapter { paymentItem ->
-            Toast.makeText(context, "Iniciando pago para la cuota de ${paymentItem.concept}", Toast.LENGTH_SHORT).show()
-            // Aquí llamarías al ViewModel para iniciar el flujo de pago con Mercado Pago
-            // viewModel.initiatePayment(paymentItem.id)
+            currentPaymentId = paymentItem.id
+            viewModel.onPayClicked(paymentItem.id)
         }
         binding.rvPayments.apply {
             adapter = paymentsAdapter
@@ -56,10 +90,25 @@ class PaymentsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    // binding.progressBar.isVisible = state.isLoading
 
-                    binding.tvTotalDueAmount.text = "S/ ${state.totalDueThisMonth}"
                     paymentsAdapter.submitList(state.paymentItems)
+
+                    binding.switchDiscount.setOnCheckedChangeListener(null)
+
+                    binding.switchDiscount.isEnabled = state.canApplyDiscount
+                    if (!state.canApplyDiscount) {
+                        binding.tvDiscountLabel.text = "Descuento no disponible (Fecha expirada)"
+                        binding.switchDiscount.isChecked = false
+                    } else {
+                        binding.tvDiscountLabel.text = "Aplicar Dscto. Anual"
+                        binding.switchDiscount.isChecked = state.isDiscountActive
+                    }
+
+                    binding.switchDiscount.setOnCheckedChangeListener { _, isChecked ->
+                        viewModel.toggleDiscount(isChecked)
+                    }
+
+                    updateSummaryCard(state)
 
                     state.error?.let {
                         Toast.makeText(context, it, Toast.LENGTH_LONG).show()
@@ -69,10 +118,97 @@ class PaymentsFragment : Fragment() {
         }
     }
 
+    private fun updateSummaryCard(state: PaymentsUiState) {
+        val context = requireContext()
+
+        if (state.isDiscountActive && state.canApplyDiscount) {
+            binding.tvOriginalAmount.text = "S/ ${state.totalDue}"
+            binding.tvOriginalAmount.paintFlags = binding.tvOriginalAmount.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            binding.tvOriginalAmount.visibility = View.VISIBLE
+            binding.tvTotalDueAmount.text = "S/ ${state.discountedTotal}"
+            binding.tvTotalDueAmount.setTextColor(ContextCompat.getColor(context, R.color.white))
+            binding.chipSavings.text = "Ahorras S/ ${state.discountAmount}"
+            binding.chipSavings.visibility = View.VISIBLE
+            binding.btnPayAll.text = "Pagar S/ ${state.discountedTotal}"
+
+            binding.rvPayments.visibility = View.GONE
+        } else {
+            binding.tvOriginalAmount.visibility = View.GONE
+            binding.chipSavings.visibility = View.GONE
+            binding.tvTotalDueAmount.text = "S/ ${state.totalDue}"
+            binding.tvTotalDueAmount.setTextColor(ContextCompat.getColor(context, R.color.white))
+            binding.btnPayAll.text = "Pagar Todo"
+
+            binding.rvPayments.visibility = View.VISIBLE
+        }
+    }
+
+    private fun observeEvents() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.paymentEvent.collectLatest { event ->
+                    when (event) {
+                        is PaymentsViewModel.PaymentEvent.LaunchStripeSheet -> {
+                            // Guardamos el secreto aquí
+                            currentClientSecret = event.stripeData.paymentIntentClientSecret
+                            presentPaymentSheet(event.stripeData.paymentIntentClientSecret, event.stripeData.publishableKey)
+                        }
+                        is PaymentsViewModel.PaymentEvent.ShowError -> {
+                            Toast.makeText(context, event.message, Toast.LENGTH_LONG).show()
+                        }
+                        is PaymentsViewModel.PaymentEvent.ShowMessage -> {
+                            Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun presentPaymentSheet(clientSecret: String, publishableKey: String) {
+        PaymentConfiguration.init(requireContext(), publishableKey)
+
+        paymentSheet.presentWithPaymentIntent(
+            clientSecret,
+            PaymentSheet.Configuration(
+                merchantDisplayName = "School Jeyix",
+            )
+        )
+    }
+
+    private fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
+        when(paymentSheetResult) {
+            is PaymentSheetResult.Canceled -> {
+                Toast.makeText(context, "Pago cancelado", Toast.LENGTH_SHORT).show()
+            }
+            is PaymentSheetResult.Failed -> {
+                Toast.makeText(context, "Error: ${paymentSheetResult.error.localizedMessage}", Toast.LENGTH_LONG).show()
+            }
+            is PaymentSheetResult.Completed -> {
+                val secret = currentClientSecret
+
+                if (secret != null) {
+                    val paymentIntentId = secret.split("_secret_")[0]
+
+                    if (viewModel.isProcessingBulkPayment) {
+                        viewModel.confirmBulkPayment(paymentIntentId)
+                    } else {
+                        val paymentId = currentPaymentId
+                        if (paymentId != null) {
+                            viewModel.confirmPayment(paymentId, paymentIntentId)
+                        }
+                    }
+                } else {
+                    Toast.makeText(context, "Error interno: Datos de sesión perdidos", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        currentClientSecret = null
+        currentPaymentId = null
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

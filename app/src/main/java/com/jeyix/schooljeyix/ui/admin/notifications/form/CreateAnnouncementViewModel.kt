@@ -14,11 +14,16 @@ import javax.inject.Inject
 class CreateAnnouncementViewModel @Inject constructor(
     private val notificationUseCases: NotificationUseCases
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow<Resource<Unit>>(Resource.Loading(null))
     val uiState = _uiState.asStateFlow()
 
+    private var isProcessing = false
+
     fun sendAnnouncement(title: String, body: String, isAll: Boolean, isParents: Boolean, isStudents: Boolean) {
+        if (isProcessing) return
+
+        isProcessing = true
+
         viewModelScope.launch {
             _uiState.value = Resource.Loading()
 
@@ -32,6 +37,7 @@ class CreateAnnouncementViewModel @Inject constructor(
 
             if (targetRoles.isEmpty()) {
                 _uiState.value = Resource.Error("Debes seleccionar al menos un destinatario.")
+                isProcessing = false
                 return@launch
             }
 
@@ -42,10 +48,15 @@ class CreateAnnouncementViewModel @Inject constructor(
             )
 
             _uiState.value = result
+
+            if (result is Resource.Error) {
+                isProcessing = false
+            }
         }
     }
 
     fun resetState() {
         _uiState.value = Resource.Loading(null)
+        isProcessing = false
     }
 }

@@ -5,6 +5,8 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("androidx.navigation.safeargs.kotlin")
+
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -40,11 +42,12 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
+
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -62,7 +65,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
-    // Networking (Retrofit + OkHttp)
+    // Networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
@@ -74,17 +77,17 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.0")
     implementation("androidx.datastore:datastore-preferences:1.1.0")
 
-    // Glide (opcional para imágenes)
+    // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
 
-    // Lottie (opcional animaciones)
+    // Lottie
     implementation("com.airbnb.android:lottie:6.0.0")
 
     // Splash screen
     implementation("androidx.core:core-splashscreen:1.0.1")
 
-    // Para inyección de dependencias (Hilt)
+    // Hilt
     implementation("com.google.dagger:hilt-android:2.57.2")
     kapt("com.google.dagger:hilt-compiler:2.57.2")
 
@@ -94,14 +97,21 @@ dependencies {
     // Charts
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-    //Firebase
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-messaging-ktx")
 
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    // Browser
+    implementation("androidx.browser:browser:1.8.0")
 
+    implementation("com.stripe:stripe-android:20.49.0")
 
+    val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
+    implementation(composeBom)
+
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material:material")
+
+    implementation("androidx.activity:activity-compose:1.9.0")
 }

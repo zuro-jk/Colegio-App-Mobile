@@ -2,6 +2,7 @@ package com.jeyix.schooljeyix.ui.parent.students
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jeyix.schooljeyix.data.remote.feature.student.response.StudentResponse
 import com.jeyix.schooljeyix.domain.usecase.student.GetMyStudentsUseCase
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,8 @@ class StudentsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(StudentsUiState())
     val uiState = _uiState.asStateFlow()
 
+    private var allStudentsCache: List<StudentResponse> = emptyList()
+
     init {
         loadStudents()
     }
@@ -29,8 +32,10 @@ class StudentsViewModel @Inject constructor(
 
             when (val result = getMyStudentsUseCase()) {
                 is Resource.Success -> {
+                    val students = result.data ?: emptyList()
+                    allStudentsCache = students
                     _uiState.update {
-                        it.copy(isLoading = false, students = result.data ?: emptyList())
+                        it.copy(isLoading = false, students = students)
                     }
                 }
                 is Resource.Error -> {
@@ -38,8 +43,19 @@ class StudentsViewModel @Inject constructor(
                         it.copy(isLoading = false, error = result.message)
                     }
                 }
-                is Resource.Loading -> { /* Ya estamos en estado de carga */ }
+                is Resource.Loading -> { }
             }
         }
+    }
+
+    fun searchStudent(query: String) {
+        val filteredList = if (query.isEmpty()) {
+            allStudentsCache
+        } else {
+            allStudentsCache.filter {
+                it.user.fullName.contains(query, ignoreCase = true)
+            }
+        }
+        _uiState.update { it.copy(students = filteredList) }
     }
 }

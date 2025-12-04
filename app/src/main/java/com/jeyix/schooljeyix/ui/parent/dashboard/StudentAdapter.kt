@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.StudentSummary
-
 import com.jeyix.schooljeyix.databinding.ItemStudentSummaryBinding
-class StudentAdapter: ListAdapter<StudentSummary, StudentAdapter.StudentViewHolder>(StudentDiffCallback()) {
+
+class StudentAdapter : ListAdapter<StudentSummary, StudentAdapter.StudentViewHolder>(StudentDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
         val binding = ItemStudentSummaryBinding.inflate(
@@ -21,12 +21,10 @@ class StudentAdapter: ListAdapter<StudentSummary, StudentAdapter.StudentViewHold
         return StudentViewHolder(binding)
     }
 
-    // Vincula los datos de un estudiante con las vistas del ViewHolder
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    // ViewHolder que contiene las referencias a las vistas de un item
     inner class StudentViewHolder(private val binding: ItemStudentSummaryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -34,8 +32,14 @@ class StudentAdapter: ListAdapter<StudentSummary, StudentAdapter.StudentViewHold
             binding.tvStudentName.text = student.fullName
             binding.tvStudentGrade.text = student.gradeLevel
 
+            val avatarUrl = if (!student.profileImageUrl.isNullOrBlank()) {
+                student.profileImageUrl
+            } else {
+                "https://api.dicebear.com/9.x/adventurer/png?seed=${student.fullName}"
+            }
+
             Glide.with(itemView.context)
-                .load(student.profileImageUrl)
+                .load(avatarUrl)
                 .placeholder(R.drawable.ic_student_24)
                 .error(R.drawable.ic_student_24)
                 .into(binding.ivStudentAvatar)

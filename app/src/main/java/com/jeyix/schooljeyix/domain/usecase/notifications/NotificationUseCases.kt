@@ -2,14 +2,37 @@ package com.jeyix.schooljeyix.domain.usecase.notifications
 
 import com.jeyix.schooljeyix.data.remote.feature.notifications.request.AnnouncementRequest
 import com.jeyix.schooljeyix.data.remote.feature.notifications.request.ContactNotificationEvent
+import com.jeyix.schooljeyix.data.remote.feature.notifications.response.NotificationResponse
+import com.jeyix.schooljeyix.domain.model.Announcement
+import com.jeyix.schooljeyix.domain.model.AnnouncementType
 import com.jeyix.schooljeyix.domain.repository.NotificationRepository
 import com.jeyix.schooljeyix.domain.util.Resource
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 class NotificationUseCases @Inject constructor(
     private val repository: NotificationRepository
 ){
 
+    suspend fun getAnnouncements(): Resource<List<Announcement>> {
+        return when(val result = repository.getAllNotifications()) {
+            is Resource.Success -> {
+                val apiList = result.data ?: emptyList()
+
+                val domainList = apiList.map { dto ->
+                    mapToDomain(dto)
+                }.sortedByDescending { it.id }
+
+                Resource.Success(domainList)
+            }
+            is Resource.Error -> {
+                Resource.Error(result.message ?: "Error desconocido")
+            }
+            is Resource.Loading -> Resource.Loading()
+        }
+    }
 
     suspend fun sendAnnouncement(
         title: String,
@@ -50,5 +73,31 @@ class NotificationUseCases @Inject constructor(
         )
 
         return repository.sendContact(request)
+    }
+
+    private fun mapToDomain(dto: NotificationResponse): Announcement {
+        val type = when {
+            dto.title.contains("Pago", true) || dto.title.contains("Deuda", true) -> AnnouncementType.PAYMENT
+            dto.title.contains("Urgente", true) || dto.title.contains("Importante", true) -> AnnouncementType.URGENT
+            else -> AnnouncementType.INFO
+        }
+
+        val formattedDate = try {
+            val parsedDate = LocalDateTime.parse(dto.sentAt)
+            val formatter = DateTimeFormatter.ofPattern("dd MMM, hh:mm a", Locale("es", "ES"))
+            parsedDate.format(formatter)
+        } catch (e: Exception) {
+            dto.sentAt
+        }
+
+        return Announcement(
+            id = dto.id,
+            title = dto.title,
+            body = dto.body,
+            target = dto.recipientName ?: "Todos",
+            timestamp = formattedDate,
+            type = type,
+            isUnread = false
+        )
     }
 }

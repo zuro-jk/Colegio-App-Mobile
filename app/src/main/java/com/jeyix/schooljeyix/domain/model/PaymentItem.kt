@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 data class PaymentItem(
     val id: Long,
+    val enrollmentId: Long,
     val amount: BigDecimal,
     val dueDate: LocalDate,
     val isPaid: Boolean,

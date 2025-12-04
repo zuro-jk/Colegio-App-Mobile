@@ -9,6 +9,7 @@ import com.jeyix.schooljeyix.data.remote.feature.enrollment.api.EnrollmentApi
 import com.jeyix.schooljeyix.data.remote.feature.grade.api.GradeApi
 import com.jeyix.schooljeyix.data.remote.feature.notifications.api.NotificationApi
 import com.jeyix.schooljeyix.data.remote.feature.parent.api.ParentApi
+import com.jeyix.schooljeyix.data.remote.feature.payment.api.PaymentApi
 import com.jeyix.schooljeyix.data.remote.feature.section.api.SectionApi
 import com.jeyix.schooljeyix.data.remote.feature.student.api.StudentApi
 import com.jeyix.schooljeyix.data.remote.feature.users.api.UserApi
@@ -98,4 +99,10 @@ object NetworkModule {
     @Singleton
     fun provideNotificationApi(retrofit: Retrofit): NotificationApi = retrofit.create(
         NotificationApi::class.java)
+
+    @Provides
+    @Singleton
+    fun providePaymentApi(retrofit: Retrofit): PaymentApi {
+        return retrofit.create(PaymentApi::class.java)
+    }
 }

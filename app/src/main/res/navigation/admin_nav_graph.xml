@@ -9,7 +9,21 @@
         android:id="@+id/nav_admin_dashboard"
         android:name="com.jeyix.schooljeyix.ui.admin.dashboard.DashboardFragment"
         android:label="Dashboard"
-        tools:layout="@layout/fragment_admin_dashboard" />
+        tools:layout="@layout/fragment_admin_dashboard">
+
+        <action
+            android:id="@+id/action_dashboard_to_studentForm"
+            app:destination="@id/adminStudentFormFragment" />
+
+        <action
+            android:id="@+id/action_dashboard_to_createEnrollment"
+            app:destination="@id/createEnrollmentFragment" />
+
+        <action
+            android:id="@+id/action_dashboard_to_createAnnouncement"
+            app:destination="@id/createAnnouncementFragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_admin_users"
@@ -56,6 +70,23 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_admin_finance"
+        android:name="com.jeyix.schooljeyix.ui.admin.enrollments.EnrollmentsFragment"
+        android:label="Gestión Financiera"
+        tools:layout="@layout/fragment_admin_enrollments">
+        <action
+            android:id="@+id/action_nav_admin_finance_to_createEnrollmentFragment"
+            app:destination="@id/createEnrollmentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createEnrollmentFragment"
+        android:name="com.jeyix.schooljeyix.ui.admin.enrollments.form.AdminCreateEnrollmentFragment"
+        android:label="Crear Anuncio"
+        tools:layout="@layout/fragment_admin_create_announcement" />
+
+
+    <fragment
         android:id="@+id/adminStaffFormFragment"
         android:name="com.jeyix.schooljeyix.ui.admin.users.staff.form.AdminStaffFormFragment"
         android:label="Gestionar Personal"
@@ -66,12 +97,6 @@
             app:argType="long"
             android:defaultValue="0L" />
     </fragment>
-
-    <fragment
-        android:id="@+id/nav_admin_finance"
-        android:name="com.jeyix.schooljeyix.ui.admin.enrollments.EnrollmentsFragment"
-        android:label="Gestión Financiera"
-        tools:layout="@layout/fragment_admin_enrollments" />
 
     <fragment
         android:id="@+id/nav_admin_communications"
@@ -89,5 +114,13 @@
         android:name="com.jeyix.schooljeyix.ui.admin.notifications.form.AdminCreateAnnouncementFragment"
         android:label="Crear Anuncio"
         tools:layout="@layout/fragment_admin_create_announcement" />
+
+
+
+
+
+
+
+
 
 </navigation>

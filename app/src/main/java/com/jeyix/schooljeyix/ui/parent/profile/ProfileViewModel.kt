@@ -23,10 +23,8 @@ class ProfileViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
-        // Observamos el flujo de datos del usuario desde DataStore
         userPreferences.user
             .onEach { user ->
-                // Cada vez que los datos del usuario cambien, actualizamos el estado
                 _uiState.update { it.copy(userProfile = user) }
             }
             .launchIn(viewModelScope)

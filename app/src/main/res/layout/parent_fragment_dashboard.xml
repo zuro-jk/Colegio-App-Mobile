@@ -1,203 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:clipToPadding="false"
-    android:padding="16dp"
+    android:fillViewport="true"
     tools:context=".ui.parent.dashboard.DashboardFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:paddingBottom="32dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <View
+            android:id="@+id/headerBg"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:cardCornerRadius="32dp"
-                app:cardElevation="4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="#000"
-                android:backgroundTint="@color/primary"
-                app:strokeWidth="1dp">
-
-                <ImageView
-                    android:id="@+id/ivAvatar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="Avatar del padre"
-                    android:scaleType="centerCrop"
-                    tools:src="@drawable/ic_parent_avatar_24" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/tvWelcome"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="18dp"
-                android:textAppearance="?attr/textAppearanceTitleLarge"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/materialCardView"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="¡Hola, Carlos!" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="220dp"
+            android:background="@drawable/gradient_calm_blue_start"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tvWelcomeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginBottom="8dp"
-            android:text="Resumen del Mes"
-            android:textAppearance="?attr/textAppearanceTitleMedium" />
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="48dp"
+            android:text="Bienvenido de nuevo,"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="@color/white"
+            android:alpha="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            tools:text="Carlos Vargas"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/ivAvatar"
+            app:layout_constraintStart_toStartOf="@id/tvWelcomeTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvWelcomeTitle" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="20dp"
+            android:padding="2dp"
+            android:background="@drawable/bg_circle_white_alpha"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+            app:layout_constraintBottom_toBottomOf="@id/tvWelcome"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvWelcomeTitle"
+            tools:src="@drawable/ic_parent_avatar_24" />
+
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardFinance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            android:backgroundTint="@color/secondary"
-            app:strokeWidth="0dp">
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp"
+            app:strokeWidth="0dp"
+            app:layout_constraintTop_toBottomOf="@id/tvWelcome">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <LinearLayout
-                    android:id="@+id/layoutOverduePayment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/bg_error_rounded"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:visibility="gone"
-                    tools:visibility="visible">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_error_24"
-                        app:tint="#fff" />
-
-                    <TextView
-                        android:id="@+id/tvOverdueCount"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:textColor="#fff"
-                        android:textStyle="bold"
-                        tools:text="¡Atención! Tienes 2 pagos vencidos." />
-                </LinearLayout>
+                android:padding="24dp">
 
                 <TextView
+                    android:id="@+id/tvFinanceTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Próximo Vencimiento"
-                    android:textAppearance="?attr/textAppearanceLabelMedium"
-                    android:textColor="@color/white" />
+                    android:textAppearance="?attr/textAppearanceTitleSmall"
+                    android:textColor="?android:attr/textColorSecondary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvNextPaymentInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:layout_marginTop="8dp"
+                    tools:text="S/ 450.00"
+                    android:textAppearance="?attr/textAppearanceHeadlineLarge"
                     android:textStyle="bold"
-                    tools:text="S/ 450.00 - Luis Ramírez"
-                    android:textColor="@color/white"
-                    />
+                    android:textColor="?attr/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvFinanceTitle" />
+
+                <TextView
+                    android:id="@+id/tvNextPaymentLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    tools:text="Matrícula - Luis Ramírez"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvNextPaymentInfo" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:background="?attr/colorOutlineVariant"
+                    android:alpha="0.5"
+                    app:layout_constraintTop_toBottomOf="@id/tvNextPaymentLabel" />
+
+                <ImageView
+                    android:id="@+id/ivCalendar"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_date_range_24"
+                    app:tint="?attr/colorError"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider" />
 
                 <TextView
                     android:id="@+id/tvNextPaymentDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                    tools:text="Vence el 15 de Noviembre, 2025"
-                    android:textColor="@color/white"
-                    />
+                    android:layout_marginStart="8dp"
+                    tools:text="Vence el 15 de Noviembre"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorError"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/ivCalendar"
+                    app:layout_constraintBottom_toBottomOf="@id/ivCalendar"
+                    app:layout_constraintTop_toTopOf="@id/ivCalendar" />
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layoutOverduePayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_error_rounded_light"
+                    android:padding="12dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/ivCalendar"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_error_24"
+                        app:tint="@color/error"/>
+
+                    <TextView
+                        android:id="@+id/tvOverdueCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textColor="@color/error"
+                        android:textStyle="bold"
+                        tools:text="Tienes 2 pagos vencidos"/>
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
 
         <TextView
+            android:id="@+id/lblStudents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="32dp"
             android:text="Mis Hijos"
-            android:textAppearance="?attr/textAppearanceTitleMedium" />
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardFinance" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvStudents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:clipToPadding="false"
+            android:paddingHorizontal="20dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_student_summary" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
-
-            <TextView
-                android:id="@+id/tvAnnouncementsTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="Anuncios Recientes"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnViewAllAnnouncements"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ver todos"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAnnouncements"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="3"
-            tools:listitem="@layout/item_announcement_summary" />
+            tools:listitem="@layout/item_student_summary"
+            app:layout_constraintTop_toBottomOf="@id/lblStudents" />
 
-    </LinearLayout>
-</ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

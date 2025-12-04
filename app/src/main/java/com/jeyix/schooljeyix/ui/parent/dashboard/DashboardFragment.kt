@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -64,6 +65,7 @@ class DashboardFragment : Fragment() {
                     updateWelcomeUI(state.parentName, state.parentAvatarUrl)
                     updateFinancialUI(state.nextPayment, state.overduePaymentsCount)
                     updateStudentsUI(state.students)
+
                     state.error?.let {
                         Log.e("DashboardDebug", "Error en el estado: $it")
                     }
@@ -73,7 +75,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun updateWelcomeUI(name: String, avatarUrl: String?) {
-        binding.tvWelcome.text = "¡Hola, $name!"
+        binding.tvWelcome.text = name
         Glide.with(requireContext())
             .load(avatarUrl)
             .transform(CircleCrop())
@@ -83,22 +85,60 @@ class DashboardFragment : Fragment() {
     }
 
     private fun updateFinancialUI(nextPayment: PaymentSummary?, overdueCount: Int) {
-        binding.layoutOverduePayment.isVisible = overdueCount > 0
+        val context = requireContext()
+
         if (overdueCount > 0) {
-            binding.tvOverdueCount.text = "¡Atención! Tienes $overdueCount pago(s) vencido(s)."
+            binding.layoutOverduePayment.isVisible = true
+            binding.tvOverdueCount.text = "Tienes $overdueCount pago(s) vencido(s)"
+
+            binding.tvFinanceTitle.text = "¡Atención Requerida!"
+            binding.tvFinanceTitle.setTextColor(ContextCompat.getColor(context, R.color.error))
+        } else {
+            binding.layoutOverduePayment.isVisible = false
+            binding.tvFinanceTitle.setTextColor(ContextCompat.getColor(context, R.color.primary))
         }
 
+        // 2. Manejo del Próximo Pago
         if (nextPayment != null) {
-            // CORRECCIÓN: Usamos el studentName que ahora viene en el objeto
-            binding.tvNextPaymentInfo.text = "S/ ${nextPayment.amount} - ${nextPayment.studentName}"
+            binding.tvFinanceTitle.text = if (overdueCount > 0) "¡Atención Requerida!" else "Próximo Vencimiento"
 
-            // CORRECCIÓN: Parseamos el String a LocalDate ANTES de formatearlo
-            val formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM, yyyy", Locale("es", "ES"))
-            val date = LocalDate.parse(nextPayment.dueDate)
-            binding.tvNextPaymentDate.text = "Vence el ${date.format(formatter)}"
+            binding.tvNextPaymentInfo.text = "S/ ${nextPayment.amount}"
+            binding.tvNextPaymentInfo.setTextColor(ContextCompat.getColor(context, R.color.primary))
+            binding.tvNextPaymentLabel.text = "Matrícula - ${nextPayment.studentName}"
+
+            binding.divider.isVisible = true
+            binding.ivCalendar.isVisible = true
+            binding.tvNextPaymentDate.isVisible = true
+
+            try {
+                val date = LocalDate.parse(nextPayment.dueDate)
+                val formatter = DateTimeFormatter.ofPattern("dd 'de' MMMM", Locale("es", "ES"))
+                val fechaFormateada = date.format(formatter)
+
+                if (date.isBefore(LocalDate.now())) {
+                    binding.tvNextPaymentDate.text = "Venció el $fechaFormateada"
+                    binding.tvNextPaymentDate.setTextColor(ContextCompat.getColor(context, R.color.error))
+                    binding.ivCalendar.setColorFilter(ContextCompat.getColor(context, R.color.error))
+                } else {
+                    binding.tvNextPaymentDate.text = "Vence el $fechaFormateada"
+                    binding.tvNextPaymentDate.setTextColor(ContextCompat.getColor(context, R.color.primary))
+                    binding.ivCalendar.setColorFilter(ContextCompat.getColor(context, R.color.primary))
+                }
+
+            } catch (e: Exception) {
+                binding.tvNextPaymentDate.text = "Vence: ${nextPayment.dueDate}"
+            }
         } else {
-            binding.tvNextPaymentInfo.text = "No tienes pagos próximos."
-            binding.tvNextPaymentDate.text = "¡Estás al día!"
+            if (overdueCount == 0) {
+                binding.tvFinanceTitle.text = "Estado de Cuenta"
+                binding.tvNextPaymentInfo.text = "¡Todo al día!"
+                binding.tvNextPaymentInfo.setTextColor(ContextCompat.getColor(context, R.color.success))
+                binding.tvNextPaymentLabel.text = "No tienes pagos pendientes."
+
+                binding.divider.isVisible = false
+                binding.ivCalendar.isVisible = false
+                binding.tvNextPaymentDate.isVisible = false
+            }
         }
     }
 
@@ -110,5 +150,4 @@ class DashboardFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.data.remote.feature.enrollment.response.EnrollmentStatus
@@ -48,7 +49,6 @@ class EnrollmentsFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = EnrollmentsAdapter { enrollment ->
             Toast.makeText(context, "Detalles de: ${enrollment.student.fullName}", Toast.LENGTH_SHORT).show()
-            // Aquí navegarías al detalle de la matrícula si quisieras
         }
         binding.rvEnrollments.layoutManager = LinearLayoutManager(context)
         binding.rvEnrollments.adapter = adapter
@@ -74,7 +74,7 @@ class EnrollmentsFragment : Fragment() {
 
     private fun setupFab() {
         binding.fabAddEnrollment.setOnClickListener {
-            Toast.makeText(context, "Crear Nueva Matrícula", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_nav_admin_finance_to_createEnrollmentFragment)
         }
     }
 

@@ -1,21 +1,26 @@
 package com.jeyix.schooljeyix.ui.login
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import com.jeyix.schooljeyix.data.local.datastore.UserPreferences
 import com.jeyix.schooljeyix.data.remote.feature.auth.request.LoginRequest
 import com.jeyix.schooljeyix.domain.usecase.auth.LoginUseCase
+import com.jeyix.schooljeyix.domain.usecase.users.UserUseCases
 import com.jeyix.schooljeyix.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val userPreferences: UserPreferences
+    private val userPreferences: UserPreferences,
+    private val userUseCases: UserUseCases
 ): ViewModel() {
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState = _loginState.asStateFlow()
@@ -43,6 +48,10 @@ class LoginViewModel @Inject constructor(
                         (roles?.contains("ROLE_STUDENT") ?: false) -> "ROLE_STUDENT"
                         else -> "UNKNOWN"
                     }
+
+                    val fcmToken = FirebaseMessaging.getInstance().token.await()
+                    Log.d("FCM", "Token obtenido en login: $fcmToken")
+                    userUseCases.updateDeviceToken(fcmToken)
 
                     _loginState.value = LoginState.Success(primaryRole)
                 }
