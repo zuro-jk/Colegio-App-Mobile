@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.ui.admin.users.settings
+package com.jeyix.schooljeyix.ui.admin.settings
 
 import android.os.Bundle
 import android.view.View

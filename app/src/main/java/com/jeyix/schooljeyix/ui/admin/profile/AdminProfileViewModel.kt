@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.ui.admin.users.profile
+package com.jeyix.schooljeyix.ui.admin.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

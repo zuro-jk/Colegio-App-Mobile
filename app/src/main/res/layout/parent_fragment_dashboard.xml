@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="?android:attr/colorBackground"
     android:fillViewport="true"
     tools:context=".ui.parent.dashboard.DashboardFragment">
 
@@ -15,61 +15,40 @@
 
         <View
             android:id="@+id/headerBg"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:background="@drawable/gradient_calm_blue_start"
+            style="@style/DashboardHeaderView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvWelcomeTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/DashboardWelcomeLabel"
             android:layout_marginStart="20dp"
             android:layout_marginTop="48dp"
             android:text="Bienvenido de nuevo,"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="@color/white"
-            android:alpha="0.8"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvWelcome"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/DashboardWelcomeName"
             android:layout_marginEnd="16dp"
-            tools:text="Carlos Vargas"
-            android:textAppearance="?attr/textAppearanceHeadlineMedium"
-            android:textColor="@color/white"
-            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/ivAvatar"
             app:layout_constraintStart_toStartOf="@id/tvWelcomeTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvWelcomeTitle" />
+            app:layout_constraintTop_toBottomOf="@id/tvWelcomeTitle"
+            tools:text="Carlos Vargas" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivAvatar"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            style="@style/DashboardAvatar"
             android:layout_marginEnd="20dp"
-            android:padding="2dp"
-            android:background="@drawable/bg_circle_white_alpha"
-            android:scaleType="centerCrop"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
             app:layout_constraintBottom_toBottomOf="@id/tvWelcome"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvWelcomeTitle"
             tools:src="@drawable/ic_parent_avatar_24" />
 
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardFinance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            style="@style/DashboardFinanceCard"
             android:layout_marginTop="32dp"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="8dp"
-            app:strokeWidth="0dp"
             app:layout_constraintTop_toBottomOf="@id/tvWelcome">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -79,43 +58,31 @@
 
                 <TextView
                     android:id="@+id/tvFinanceTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/DashboardCardTitle"
                     android:text="Próximo Vencimiento"
-                    android:textAppearance="?attr/textAppearanceTitleSmall"
-                    android:textColor="?android:attr/textColorSecondary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvNextPaymentInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/DashboardCardAmount"
                     android:layout_marginTop="8dp"
-                    tools:text="S/ 450.00"
-                    android:textAppearance="?attr/textAppearanceHeadlineLarge"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorPrimary"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvFinanceTitle" />
+                    app:layout_constraintTop_toBottomOf="@id/tvFinanceTitle"
+                    tools:text="S/ 450.00" />
 
                 <TextView
                     android:id="@+id/tvNextPaymentLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/DashboardCardSubtitle"
                     android:layout_marginTop="4dp"
-                    tools:text="Matrícula - Luis Ramírez"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvNextPaymentInfo" />
+                    app:layout_constraintTop_toBottomOf="@id/tvNextPaymentInfo"
+                    tools:text="Matrícula - Luis Ramírez" />
 
                 <View
                     android:id="@+id/divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    style="@style/DashboardDivider"
                     android:layout_marginTop="20dp"
-                    android:background="?attr/colorOutlineVariant"
-                    android:alpha="0.5"
                     app:layout_constraintTop_toBottomOf="@id/tvNextPaymentLabel" />
 
                 <ImageView
@@ -133,22 +100,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    tools:text="Vence el 15 de Noviembre"
                     android:textAppearance="?attr/textAppearanceLabelLarge"
                     android:textColor="?attr/colorError"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/ivCalendar"
                     app:layout_constraintBottom_toBottomOf="@id/ivCalendar"
-                    app:layout_constraintTop_toTopOf="@id/ivCalendar" />
+                    app:layout_constraintTop_toTopOf="@id/ivCalendar"
+                    tools:text="Vence el 15 de Noviembre" />
 
                 <LinearLayout
                     android:id="@+id/layoutOverduePayment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_error_rounded_light"
-                    android:padding="12dp"
+                    style="@style/DashboardOverdueContainer"
                     android:layout_marginTop="16dp"
                     android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/ivCalendar"
@@ -158,31 +120,23 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_error_24"
-                        app:tint="@color/error"/>
+                        app:tint="?attr/colorError" />
 
                     <TextView
                         android:id="@+id/tvOverdueCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/DashboardOverdueText"
                         android:layout_marginStart="8dp"
-                        android:textColor="@color/error"
-                        android:textStyle="bold"
-                        tools:text="Tienes 2 pagos vencidos"/>
+                        tools:text="Tienes 2 pagos vencidos" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-
         <TextView
             android:id="@+id/lblStudents"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            style="@style/ParentDashboardSectionTitle"
             android:layout_marginTop="32dp"
             android:text="Mis Hijos"
-            android:textAppearance="?attr/textAppearanceTitleLarge"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardFinance" />
 
@@ -192,12 +146,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:clipToPadding="false"
-            android:paddingHorizontal="20dp"
             android:orientation="horizontal"
+            android:paddingHorizontal="20dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/lblStudents"
             tools:itemCount="3"
-            tools:listitem="@layout/item_student_summary"
-            app:layout_constraintTop_toBottomOf="@id/lblStudents" />
+            tools:listitem="@layout/item_student_summary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

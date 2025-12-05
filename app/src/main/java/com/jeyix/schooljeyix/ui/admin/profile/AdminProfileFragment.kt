@@ -1,4 +1,4 @@
-package com.jeyix.schooljeyix.ui.admin.users.profile
+package com.jeyix.schooljeyix.ui.admin.profile
 
 import android.os.Bundle
 import android.view.View
@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.jeyix.schooljeyix.R
 import com.jeyix.schooljeyix.data.remote.feature.auth.response.UserProfileResponse
@@ -32,7 +33,7 @@ class AdminProfileFragment : Fragment(R.layout.fragment_admin_profile) {
 
     private fun setupListeners() {
         binding.btnEditProfile.setOnClickListener {
-            Toast.makeText(context, "Próximamente: Editar Perfil", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_nav_profile_to_editProfile)
         }
     }
 
@@ -69,7 +70,6 @@ class AdminProfileFragment : Fragment(R.layout.fragment_admin_profile) {
                 .placeholder(R.drawable.ic_account_circle_24)
                 .into(ivProfileImage)
 
-            // Datos de detalle
             itemUsername.tvLabel.text = "Usuario"
             itemUsername.tvValue.text = "@${user.username}"
             itemUsername.ivIcon.setImageResource(R.drawable.ic_account_circle_24)
